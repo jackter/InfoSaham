@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_reksadana"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_marginRight="30px"
+        android:layout_marginLeft="30px"
+        android:layout_marginBottom="15px">
+        <LinearLayout
+            android:id="@+id/linLayoutMC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/gradient"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12pt"
+                android:text="RD TRIM SYARIAH SAHAM"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="Jenis : "/>
+
+            <TextView
+                android:id="@+id/tvType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="15dp"
+                android:text="Saham"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="Kategori : "/>
+
+            <TextView
+                android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="15dp"
+                android:text="Sharia"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="Mata Uang : "/>
+
+            <TextView
+                android:id="@+id/tvCur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="15dp"
+                android:text="IDR"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TableLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="1 Day"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="MtD"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="1 Month"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape1"
+                        android:gravity="center_horizontal"
+                        android:text="YtD"
+                        android:textColor="@android:color/white"
+                        android:textSize="8pt" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="1 Year"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv1day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="0,96%"/>
+
+                    <TextView
+                        android:id="@+id/tvMtd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="1,43%"/>
+
+                    <TextView
+                        android:id="@+id/tv1month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="8,21%"/>
+                    <TextView
+                        android:id="@+id/tvYtd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="-2,73%"/>
+                    <TextView
+                        android:id="@+id/tv1year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="22,57%"/>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:stretchColumns="0,1">
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="NAV"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Dana Kelola"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvNav"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="6pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="1.857,7000"/>
+
+                    <TextView
+                        android:id="@+id/tvAum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="6pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="149.203.646.939,69"/>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

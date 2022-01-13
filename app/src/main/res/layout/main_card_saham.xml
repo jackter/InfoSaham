@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_saham"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_marginRight="30px"
+        android:layout_marginLeft="30px"
+        android:layout_marginBottom="15px">
+        <LinearLayout
+            android:id="@+id/linLayoutMC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/gradient"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14pt"
+                android:text="Astra Agro Lestari Tbk (ALLI)"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="Sektor : "/>
+
+            <TextView
+                android:id="@+id/tvSectore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="15dp"
+                android:text="Barang Konsumen Primer"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="Sub Industry : "/>
+
+            <TextView
+                android:id="@+id/tvSubIndustry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="15dp"
+                android:text="Perkebunan &amp; Tanaman Pangan"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TableLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Last"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Prev"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Open"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvLast"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="10.000,00"/>
+
+                    <TextView
+                        android:id="@+id/tvPrev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="9.775,00"/>
+                    <TextView
+                        android:id="@+id/tvOpen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="9.775,00"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="High"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Low"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="PER"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="PBV"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvHigh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="10.300,00"/>
+
+                    <TextView
+                        android:id="@+id/tvLow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="9.825,00"/>
+                    <TextView
+                        android:id="@+id/tvPER"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="17,6491"/>
+                    <TextView
+                        android:id="@+id/tvPBV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="0,9649"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="1 Day"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="1 Month"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape1"
+                        android:gravity="center_horizontal"
+                        android:text="Ytd"
+                        android:textColor="@android:color/white"
+                        android:textSize="8pt" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="1 Year"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv1day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="2,30%"/>
+
+                    <TextView
+                        android:id="@+id/tv1month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="16,28%"/>
+                    <TextView
+                        android:id="@+id/tvYtd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="-18,86%"/>
+                    <TextView
+                        android:id="@+id/tv1year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="center_horizontal"
+                        android:text="-6,32%"/>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:stretchColumns="0,1, 2">
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Volume"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Value"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape1"
+                        android:text="Market Cap"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvVol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="5.5pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="9.229.300"/>
+
+                    <TextView
+                        android:id="@+id/tvVal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="5.5pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="93.679.775.000"/>
+
+                    <TextView
+                        android:id="@+id/tvCap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="5.5pt"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="19.246.883.330.000"/>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
