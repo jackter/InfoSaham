@@ -7,12 +7,163 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SahamDetailActivity">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_saham"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_marginRight="30px"
+        android:layout_marginLeft="30px"
+        android:layout_marginBottom="15px">
+        <LinearLayout
+            android:id="@+id/linLayoutMC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14pt"
+                android:text="Astra Agro Lestari Tbk (ALLI)"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="Sektor : "/>
+
+            <TextView
+                android:id="@+id/tvSectore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="15dp"
+                android:text="Barang Konsumen Primer"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="Sub Industry : "/>
+
+            <TextView
+                android:id="@+id/tvSubIndustry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="15dp"
+                android:text="Perkebunan &amp; Tanaman Pangan"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TableLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:stretchColumns="0,1, 2">
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1a"
+                        android:text="Volume"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1"
+                        android:text="Value"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1b"
+                        android:text="Market Cap"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvVol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="5.5pt"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2a"
+                        android:gravity="right"
+                        android:text="9.229.300"/>
+
+                    <TextView
+                        android:id="@+id/tvVal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="5.5pt"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="93.679.775.000"/>
+
+                    <TextView
+                        android:id="@+id/tvCap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="5.5pt"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2b"
+                        android:gravity="right"
+                        android:text="19.246.883.330.000"/>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
     <LinearLayout
         android:id="@+id/linLayLiveChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,8 +198,8 @@
         android:id="@+id/btnShowLiveChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show Live Chart"
-        android:backgroundTint="@color/teal_700"
+        android:text="SHOW LIVE CHART"
+        android:backgroundTint="@color/accent"
         android:layout_margin="10dp"
         android:textColor="#fff"/>
     <LinearLayout
@@ -84,19 +235,32 @@
         android:id="@+id/btnShowChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show Chart"
-        android:backgroundTint="@color/teal_700"
+        android:text="SHOW CHART"
+        android:backgroundTint="@color/accent"
         android:layout_margin="10dp"
         android:textColor="#fff"/>
+
+    <WebView
+        android:id="@+id/webView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
     <TextView
+        android:id="@+id/divTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="Dividend Yield"
-        android:layout_gravity="center_horizontal"/>
+        android:textColor="@color/blue"
+        android:textStyle="bold"
+        android:textSize="8pt"
+        android:visibility="gone"
+        android:layout_marginLeft="10dp"
+        android:text="# DIVIDEND YIELD"/>
     <ScrollView
         android:id="@+id/layout"
+        android:paddingLeft="4dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:scrollbars="horizontal|vertical"
         android:layout_width="match_parent"
         android:layout_marginTop="5dip"

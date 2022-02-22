@@ -105,8 +105,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape1"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1a"
                         android:text="1 Day"/>
 
                     <TextView
@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
+                        android:textColor="#5abd96"
                         android:background="@drawable/shape1"
                         android:text="MtD"/>
 
@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
+                        android:textColor="#5abd96"
                         android:background="@drawable/shape1"
                         android:text="1 Month"/>
 
@@ -133,7 +133,7 @@
                         android:background="@drawable/shape1"
                         android:gravity="center_horizontal"
                         android:text="YtD"
-                        android:textColor="@android:color/white"
+                        android:textColor="#5abd96"
                         android:textSize="8pt" />
 
                     <TextView
@@ -141,8 +141,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape1"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1b"
                         android:text="1 Year"/>
                 </TableRow>
 
@@ -155,8 +155,8 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape2"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2a"
                         android:gravity="center_horizontal"
                         android:text="0,96%"/>
 
@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
+                        android:textColor="#bca15c"
                         android:background="@drawable/shape2"
                         android:gravity="center_horizontal"
                         android:text="1,43%"/>
@@ -177,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
+                        android:textColor="#bca15c"
                         android:background="@drawable/shape2"
                         android:gravity="center_horizontal"
                         android:text="8,21%"/>
@@ -187,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
+                        android:textColor="#bca15c"
                         android:background="@drawable/shape2"
                         android:gravity="center_horizontal"
                         android:text="-2,73%"/>
@@ -197,8 +197,8 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape2"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2b"
                         android:gravity="center_horizontal"
                         android:text="22,57%"/>
                 </TableRow>
@@ -219,8 +219,8 @@
                         android:layout_column="0"
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape1"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1a"
                         android:text="NAV"/>
 
                     <TextView
@@ -229,8 +229,8 @@
                         android:layout_column="1"
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape1"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1b"
                         android:text="Dana Kelola"/>
                 </TableRow>
 
@@ -243,8 +243,8 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textSize="6pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape2"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2a"
                         android:gravity="right"
                         android:text="1.857,7000"/>
 
@@ -254,8 +254,8 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:textSize="6pt"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/shape2"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2b"
                         android:gravity="right"
                         android:text="149.203.646.939,69"/>
                 </TableRow>

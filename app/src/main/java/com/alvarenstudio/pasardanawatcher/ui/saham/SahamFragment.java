@@ -1,9 +1,11 @@
 package com.alvarenstudio.pasardanawatcher.ui.saham;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -14,8 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alvarenstudio.pasardanawatcher.HttpHandler;
@@ -94,12 +99,15 @@ public class SahamFragment extends Fragment {
         });
 
         new doItJsonSaham().execute();
+
+        setMenuVisibility(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_saham, container, false);
     }
 
@@ -391,4 +399,10 @@ public class SahamFragment extends Fragment {
 
         dialog.show();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.right_menu, menu) ;
+    }
+
 }

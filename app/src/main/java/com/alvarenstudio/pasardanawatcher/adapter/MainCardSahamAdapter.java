@@ -2,9 +2,11 @@ package com.alvarenstudio.pasardanawatcher.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,10 +36,12 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
     public class viewHolder extends RecyclerView.ViewHolder{
         public TextView tvName, tvSectore, tvSubIndustry, tvLast, tvPrev, tvOpen, tvHigh, tvLow, tvPER, tvPBV, tvVol, tvVal, tv1Day, tv1Month, tvYtd, tv1Year, tvCap;
         public CardView cardSaham;
+        public LinearLayout linLayoutMC;
 
         public viewHolder(View itemView) {
             super(itemView);
 
+            linLayoutMC = itemView.findViewById(R.id.linLayoutMC);
             cardSaham = itemView.findViewById(R.id.card_saham);
             tvName = itemView.findViewById(R.id.tvName);
             tvSectore = itemView.findViewById(R.id.tvSectore);
@@ -77,6 +81,13 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
                 Intent intent = new Intent(mContext, SahamDetailActivity.class);
                 intent.putExtra("id", mainCardSaham.getId());
                 intent.putExtra("code", mainCardSaham.getCode());
+                intent.putExtra("name", mainCardSaham.getName() + " (" + mainCardSaham.getCode() + ")");
+                intent.putExtra("sectore", mainCardSaham.getSectore());
+                intent.putExtra("subIndustry", mainCardSaham.getSubindustry());
+                intent.putExtra("vol", currencyFormat(mainCardSaham.getVol()));
+                intent.putExtra("val", currencyFormat(mainCardSaham.getVal()));
+                intent.putExtra("cap", currencyFormat(mainCardSaham.getCap()));
+
                 mContext.startActivity(intent);
             }
         });
@@ -99,6 +110,13 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
         holder.tv1Month.setText(pctFormat(mainCardSaham.getOnemonth()));
         holder.tvYtd.setText(pctFormat(mainCardSaham.getYtd()));
         holder.tv1Year.setText(pctFormat(mainCardSaham.getOneyear()));
+
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[] {(int) Long.parseLong("4294944559"), (int) Long.parseLong("4294918508")});
+        gd.setCornerRadius(0f);
+
+        holder.linLayoutMC.setBackgroundDrawable(gd);
     }
 
     @Override
