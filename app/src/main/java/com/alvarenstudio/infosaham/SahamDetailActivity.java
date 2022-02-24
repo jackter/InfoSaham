@@ -1,8 +1,7 @@
-package com.alvarenstudio.pasardanawatcher;
+package com.alvarenstudio.infosaham;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,7 +13,6 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ConsoleMessage;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,12 +25,16 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alvarenstudio.pasardanawatcher.model.LVDividend;
-import com.alvarenstudio.pasardanawatcher.model.MChart;
+import com.alvarenstudio.infosaham.model.LVDividend;
+import com.alvarenstudio.infosaham.model.MChart;
+import com.alvarenstudio.infosaham.model.XYMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,8 +55,8 @@ public class SahamDetailActivity extends AppCompatActivity {
     private int id;
     private String code;
     private List<LVDividend> rowDividend;
-    private List<MChart> chartList;
-    private LineChart mLineChart;
+    private List<MChart> chartList, chartLiveList;
+    private LineChart mLineChart, mLineChartLive;
     private ArrayList<Entry> x;
     private ArrayList<String> y;
     private ProgressBar chartProgBar, chartProgBarLive;
@@ -63,8 +65,10 @@ public class SahamDetailActivity extends AppCompatActivity {
     private ImageButton imgBtnRefresh;
     private Button btnShowChart, btnShowLiveChart;
     private WebView webView;
-    private boolean flipChart = false;
-    public TextView tvName, tvSectore, tvSubIndustry, tvVol, tvVal, tvCap, tvDivTitle;
+    private boolean flipChart = false, flipChartLive = false;
+    private TextView tvName, tvSectore, tvSubIndustry, tvVol, tvVal, tvCap, tvDivTitle;
+    private ArrayList<String> liveChartStringList = new ArrayList<>();
+    private ArrayList<String> chartStringList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,7 @@ public class SahamDetailActivity extends AppCompatActivity {
         tvCap.setText(mIntent.getStringExtra("cap"));
 
         tableLayout = findViewById(R.id.tableLayoutDividen);
+        mLineChartLive = findViewById(R.id.chartLive);
         mLineChart = findViewById(R.id.chart);
         chartProgBar = findViewById(R.id.ivLoading);
         chartProgBarLive = findViewById(R.id.ivLoadingLive);
@@ -106,19 +111,41 @@ public class SahamDetailActivity extends AppCompatActivity {
 
         new doItDiv().execute();
 
+        this.webViewPg();
+        this.chart1Period();
         this.chart3Years();
+
+        btnShowLiveChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!flipChartLive) {
+                    flipChartLive = true;
+                    if(chartList == null) {
+                        webView.loadUrl("https://idx.co.id/umbraco/Surface/Helper/GetStockChart?indexCode=" + code);
+                    }
+
+                    btnShowLiveChart.setText("HIDE LIVE CHART");
+                    linLayChartLive.setVisibility(View.VISIBLE);
+                }
+                else{
+                    btnShowLiveChart.setText("SHOW LIVE CHART");
+                    linLayChartLive.setVisibility(View.GONE);
+                    flipChartLive = false;
+                }
+            }
+        });
 
         btnShowChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!flipChart) {
+                    flipChart = true;
                     if(chartList == null) {
                         webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
                     }
 
                     btnShowChart.setText("HIDE CHART");
                     linLayChart.setVisibility(View.VISIBLE);
-                    flipChart = true;
                 }
                 else{
                     btnShowChart.setText("SHOW CHART");
@@ -131,13 +158,17 @@ public class SahamDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void chart3Years() {
+    private void webViewPg() {
         WebViewClient webClient = new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-
-                chartProgBar.setVisibility(View.VISIBLE);
+                if(flipChart){
+                    chartProgBar.setVisibility(View.VISIBLE);
+                }
+                else if(flipChartLive){
+                    chartProgBarLive.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -159,17 +190,36 @@ public class SahamDetailActivity extends AppCompatActivity {
             {
                 if (cmsg.message() != null) {
                     try {
-                        JSONObject jsonObject = new JSONObject(cmsg.message());
-                        JSONArray listChart = jsonObject.getJSONArray("replies");
+                        if(flipChart) {
+                            JSONObject jsonObject = new JSONObject(cmsg.message());
+                            JSONArray listChart = jsonObject.getJSONArray("replies");
 
-                        chartList = new ArrayList<>();
-                        List<String> DateList = new ArrayList<String>();
+                            chartList = new ArrayList<>();
+                            List<String> DateList = new ArrayList<String>();
 
-                        for(int i = 0; i < listChart.length(); i++){
-                            JSONObject jsonchart = listChart.getJSONObject(i);
+                            for(int i = 0; i < listChart.length(); i++){
+                                JSONObject jsonchart = listChart.getJSONObject(i);
 
-                            if(!DateList.contains(jsonchart.getString("Date"))){
-                                chartList.add(new MChart(jsonchart.getLong("Close"), jsonchart.getString("Date")));
+                                if(!DateList.contains(jsonchart.getString("Date"))){
+                                    chartList.add(new MChart(jsonchart.getLong("Close"), jsonchart.getString("Date")));
+                                    DateList.add(jsonchart.getString("Date"));
+                                }
+                            }
+                        }
+                        else if(flipChartLive) {
+                            JSONObject jsonObject = new JSONObject(cmsg.message());
+                            JSONArray listChart = jsonObject.getJSONArray("ChartData");
+
+                            chartLiveList = new ArrayList<>();
+                            List<String> DateList = new ArrayList<String>();
+
+                            for(int i = 0; i < listChart.length(); i++){
+                                JSONObject jsonchart = listChart.getJSONObject(i);
+
+                                if(!DateList.contains(jsonchart.getLong("Date")) && jsonchart.getLong("Close") != 0){
+                                    chartLiveList.add(new MChart(jsonchart.getLong("Close"), String.valueOf(jsonchart.getLong("Date"))));
+                                    DateList.add(String.valueOf(jsonchart.getLong("Date")));
+                                }
                             }
                         }
                     } catch (JSONException e) {
@@ -196,7 +246,7 @@ public class SahamDetailActivity extends AppCompatActivity {
 
                 }
 
-                if(chartList != null){
+                if(chartList != null && flipChart){
                     if(chartList.size() > 0){
                         chartProgBar.setVisibility(View.INVISIBLE);
 
@@ -212,6 +262,7 @@ public class SahamDetailActivity extends AppCompatActivity {
                         y = new ArrayList<String>();
 
                         for (MChart chart : chartList) {
+                            chartStringList.add(chart.getDate().split("T")[0]);
                             x.add(new Entry(chart.getPrice(), i));
                             y.add(chart.getDate().split("T")[0]);
                             i++;
@@ -231,10 +282,62 @@ public class SahamDetailActivity extends AppCompatActivity {
                     }
                 }
 
+                if(chartLiveList != null && flipChartLive){
+                    if(chartLiveList.size() > 0){
+                        chartProgBarLive.setVisibility(View.INVISIBLE);
+
+                        Collections.sort(chartLiveList, new Comparator<MChart>() {
+                            @Override
+                            public int compare(MChart t1, MChart t2) {
+                                return t1.getDate().compareTo(t2.getDate());
+                            }
+                        });
+
+                        int i = 0;
+                        x = new ArrayList<Entry>();
+                        y = new ArrayList<String>();
+
+                        for (MChart chart : chartLiveList) {
+                            liveChartStringList.add(timestampToDT(Long.valueOf(chart.getDate())));
+                            x.add(new Entry(chart.getPrice(), i));
+                            y.add(timestampToDT(Long.valueOf(chart.getDate())));
+                            i++;
+                        }
+
+                        if(i > 1){
+                            LineDataSet set1 = new LineDataSet(x, "");
+                            set1.setDrawCircleHole(false);
+                            set1.setDrawCircles(false);
+                            set1.setLineWidth(1.5f);
+                            set1.setCircleRadius(4f);
+                            LineData data = new LineData(y, set1);
+                            mLineChartLive.clear();
+                            mLineChartLive.setData(data);
+                            mLineChartLive.invalidate();
+                        }
+                    }
+                }
+
                 return true;
             }
         });
+    }
 
+    private void chart1Period() {
+        mLineChartLive.setDescription("Live Chart : " + code);
+        mLineChartLive.setNoDataText("");
+        mLineChartLive.setDrawGridBackground(false);
+        mLineChartLive.setTouchEnabled(true);
+        mLineChartLive.setDragEnabled(true);
+        mLineChartLive.setScaleEnabled(true);
+        mLineChartLive.setPinchZoom(true);
+        mLineChartLive.getXAxis().setTextSize(12f);
+        mLineChartLive.getAxisLeft().setTextSize(12f);
+        XYMarkerView mv = new XYMarkerView(getApplicationContext(), R.layout.xy_marker, liveChartStringList);
+        mLineChartLive.setMarkerView(mv);
+    }
+
+    private void chart3Years() {
         mLineChart.setDescription("Chart : " + code);
         mLineChart.setNoDataText("");
         mLineChart.setDrawGridBackground(false);
@@ -244,6 +347,16 @@ public class SahamDetailActivity extends AppCompatActivity {
         mLineChart.setPinchZoom(true);
         mLineChart.getXAxis().setTextSize(12f);
         mLineChart.getAxisLeft().setTextSize(12f);
+        XYMarkerView mv = new XYMarkerView(getApplicationContext(), R.layout.xy_marker, chartStringList);
+        mLineChart.setMarkerView(mv);
+    }
+
+    private String timestampToDT(Long timestamp) {
+        long yourmilliseconds = timestamp - (7 * 3600 * 1000);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        Date resultdate = new Date(yourmilliseconds);
+
+        return sdf.format(resultdate).toString();
     }
 
     private class doItDiv extends AsyncTask<Void, Void, Void> {
@@ -404,7 +517,7 @@ public class SahamDetailActivity extends AppCompatActivity {
             textViewDesc.setText(dividen.getDesc());
             textViewDesc.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             textViewDesc.setPadding(5, 5, 5, 5);
-            textViewDesc.setTextSize(12);
+            textViewDesc.setTextSize(10);
             tableRow.addView(textViewDesc);
 
             // Dividen Column

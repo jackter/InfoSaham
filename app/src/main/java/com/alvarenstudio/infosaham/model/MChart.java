@@ -1,4 +1,4 @@
-package com.alvarenstudio.pasardanawatcher.model;
+package com.alvarenstudio.infosaham.model;
 
 public class MChart {
     private String date;

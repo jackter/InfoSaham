@@ -1,4 +1,4 @@
-package com.alvarenstudio.pasardanawatcher.adapter;
+package com.alvarenstudio.infosaham.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,9 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alvarenstudio.pasardanawatcher.R;
-import com.alvarenstudio.pasardanawatcher.model.MainCardReksadana;
-import com.alvarenstudio.pasardanawatcher.model.MainCardSaham;
+import com.alvarenstudio.infosaham.R;
+import com.alvarenstudio.infosaham.model.MainCardReksadana;
 
 import org.jetbrains.annotations.NotNull;
 

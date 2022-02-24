@@ -1,4 +1,4 @@
-package com.alvarenstudio.pasardanawatcher.ui.main;
+package com.alvarenstudio.infosaham.ui.main;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "176498535605",
+    "project_id": "info-saham",
+    "storage_bucket": "info-saham.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176498535605:android:f550b7ec31eb8f40ad62fc",
+        "android_client_info": {
+          "package_name": "com.alvarenstudio.infosaham"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176498535605-pnml7tuslctdsgk75ho9v1gl25up7inh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alvarenstudio.infosaham",
+            "certificate_hash": "5c4d4fbf1353761ac0ec4cf57756e61fb3d36628"
+          }
+        },
+        {
+          "client_id": "176498535605-lrb3jfdhar1q0ke1941hm4qdj5nug2qi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp6m-XNEPzZMV931MeQBfU4DyOYWn9Hh0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176498535605-lrb3jfdhar1q0ke1941hm4qdj5nug2qi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

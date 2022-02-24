@@ -1,4 +1,4 @@
-package com.alvarenstudio.pasardanawatcher;
+package com.alvarenstudio.infosaham;
 
 import android.content.Context;
 

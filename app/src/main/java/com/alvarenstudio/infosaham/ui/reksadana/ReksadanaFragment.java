@@ -1,11 +1,9 @@
-package com.alvarenstudio.pasardanawatcher.ui.saham;
+package com.alvarenstudio.infosaham.ui.reksadana;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -16,18 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alvarenstudio.pasardanawatcher.HttpHandler;
-import com.alvarenstudio.pasardanawatcher.MainActivity;
-import com.alvarenstudio.pasardanawatcher.R;
-import com.alvarenstudio.pasardanawatcher.adapter.MainCardSahamAdapter;
-import com.alvarenstudio.pasardanawatcher.model.MainCardSaham;
+import com.alvarenstudio.infosaham.HttpHandler;
+import com.alvarenstudio.infosaham.MainActivity;
+import com.alvarenstudio.infosaham.R;
+import com.alvarenstudio.infosaham.adapter.MainCardReksadanaAdapter;
+import com.alvarenstudio.infosaham.model.MainCardReksadana;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -41,10 +36,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SahamFragment#newInstance} factory method to
+ * Use the {@link ReksadanaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SahamFragment extends Fragment {
+public class ReksadanaFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,11 +52,11 @@ public class SahamFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private RecyclerView recyclerView;
-    private List<MainCardSaham> mMainCardSaham;
-    private MainCardSahamAdapter mainCardSahamAdapter;
-    private String TAG = SahamFragment.class.getSimpleName();
+    private List<MainCardReksadana> mMainCardReksadana;
+    private MainCardReksadanaAdapter mainCardReksadanaAdapter;
+    private String TAG = ReksadanaFragment.class.getSimpleName();
 
-    public SahamFragment() {
+    public ReksadanaFragment() {
         // Required empty public constructor
     }
 
@@ -71,11 +66,11 @@ public class SahamFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SahamFragment.
+     * @return A new instance of fragment ReksadanaFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SahamFragment newInstance(String param1, String param2) {
-        SahamFragment fragment = new SahamFragment();
+    public static ReksadanaFragment newInstance(String param1, String param2) {
+        ReksadanaFragment fragment = new ReksadanaFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,24 +86,21 @@ public class SahamFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        ((MainActivity) getContext()).getFab(1).setOnClickListener(new View.OnClickListener() {
+        ((MainActivity) getContext()).getFab(2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogForm();
             }
         });
 
-        new doItJsonSaham().execute();
-
-        setMenuVisibility(true);
+        new doItJsonReksadana().execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_saham, container, false);
+        return inflater.inflate(R.layout.fragment_reksadana, container, false);
     }
 
     @Override
@@ -130,25 +122,25 @@ public class SahamFragment extends Fragment {
 
         // below line is to get to string present from our
         // shared prefs if not present setting it as null.
-        String json = sharedPreferences.getString("maincardsaham", null);
+        String json = sharedPreferences.getString("maincardreksadana", null);
 
         // below line is to get the type of our array list.
-        Type type = new TypeToken<List<MainCardSaham>>() {}.getType();
+        Type type = new TypeToken<List<MainCardReksadana>>() {}.getType();
 
         // in below line we are getting data from gson
         // and saving it to our array list
-        mMainCardSaham = gson.fromJson(json, type);
+        mMainCardReksadana = gson.fromJson(json, type);
 
         // checking below if the array list is empty or not
-        if (mMainCardSaham == null) {
+        if (mMainCardReksadana == null) {
             // if the array list is empty
             // creating a new array list.
-            mMainCardSaham = new ArrayList<>();
+            mMainCardReksadana = new ArrayList<>();
         }
         else {
-            if(mMainCardSaham.size() > 0){
-                mainCardSahamAdapter = new MainCardSahamAdapter(getContext(), mMainCardSaham);
-                recyclerView.setAdapter(mainCardSahamAdapter);
+            if(mMainCardReksadana.size() > 0){
+                mainCardReksadanaAdapter = new MainCardReksadanaAdapter(getContext(), mMainCardReksadana);
+                recyclerView.setAdapter(mainCardReksadanaAdapter);
             }
         }
     }
@@ -178,7 +170,7 @@ public class SahamFragment extends Fragment {
         editor.apply();
     }
 
-    private class doItJsonSaham extends AsyncTask<Void, Void, Void> {
+    private class doItJsonReksadana extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -189,124 +181,74 @@ public class SahamFragment extends Fragment {
             try {
                 HttpHandler httpHandler = new HttpHandler();
 
-                String jsonurl = "https://pasardana.id/api/StockSearchResult/GetAll";
+                String jsonurl = "https://pasardana.id/api/FundSearchResult/GetAll?sortField=Name&sortOrder=ASC";
                 String jsonString = httpHandler.makeServiceCall(jsonurl);
+
                 if (jsonString != null) {
                     try {
-                        mMainCardSaham = new ArrayList<>();
-                        MainCardSaham mainCardSaham;
-                        JSONArray listSaham = new JSONArray(jsonString);
+                        mMainCardReksadana = new ArrayList<>();
+                        MainCardReksadana mainCardReksadana;
+                        JSONArray listReksadana = new JSONArray(jsonString);
 
-                        for(int i = 0; i < listSaham.length(); i++){
-                            JSONObject saham = listSaham.getJSONObject(i);
-                            mainCardSaham = new MainCardSaham();
+                        for(int i = 0; i < listReksadana.length(); i++){
+                            JSONObject reksadana = listReksadana.getJSONObject(i);
+                            mainCardReksadana = new MainCardReksadana();
 
-                            mainCardSaham.setId(saham.getInt("Id"));
-                            mainCardSaham.setName(saham.getString("Name"));
-                            mainCardSaham.setCode(saham.getString("Code"));
-                            mainCardSaham.setSectore(saham.getString("NewSectorName"));
-                            mainCardSaham.setSubindustry(saham.getString("NewSubIndustryName"));
+                            mainCardReksadana.setName(reksadana.getString("Name"));
+                            mainCardReksadana.setType(reksadana.getString("ConservativeCategory"));
+                            mainCardReksadana.setCategory(reksadana.getString("Type"));
+                            mainCardReksadana.setCur(reksadana.getInt("Currency"));
 
-                            if(!saham.isNull("AdjustedClosingPrice")){
-                                mainCardSaham.setLast(saham.getDouble("AdjustedClosingPrice"));
+                            if(!reksadana.isNull("NetAssetValue")){
+                                mainCardReksadana.setNav(reksadana.getDouble("NetAssetValue"));
                             }
                             else{
-                                mainCardSaham.setLast(0);
+                                mainCardReksadana.setNav(0);
                             }
 
-                            if(!saham.isNull("AdjustedOpenPrice")){
-                                mainCardSaham.setPrev(saham.getDouble("AdjustedOpenPrice"));
+                            if(!reksadana.isNull("AssetUnderManagement")){
+                                mainCardReksadana.setAum(reksadana.getDouble("AssetUnderManagement"));
                             }
                             else{
-                                mainCardSaham.setPrev(0);
+                                mainCardReksadana.setAum(0);
                             }
 
-                            if(!saham.isNull("AdjustedOpenPrice")){
-                                mainCardSaham.setOpen(saham.getDouble("AdjustedOpenPrice"));
+                            if(!reksadana.isNull("DailyReturn")){
+                                mainCardReksadana.setOneday(reksadana.getDouble("DailyReturn"));
                             }
                             else{
-                                mainCardSaham.setOpen(0);
+                                mainCardReksadana.setOneday(0);
                             }
 
-                            if(!saham.isNull("AdjustedHighPrice")){
-                                mainCardSaham.setHigh(saham.getDouble("AdjustedHighPrice"));
+                            if(!reksadana.isNull("MtdReturn")){
+                                mainCardReksadana.setMtd(reksadana.getDouble("MtdReturn"));
                             }
                             else{
-                                mainCardSaham.setHigh(0);
+                                mainCardReksadana.setMtd(0);
                             }
 
-                            if(!saham.isNull("AdjustedLowPrice")){
-                                mainCardSaham.setLow(saham.getDouble("AdjustedLowPrice"));
+                            if(!reksadana.isNull("MonthlyReturn")){
+                                mainCardReksadana.setOnemonth(reksadana.getDouble("MonthlyReturn"));
                             }
                             else{
-                                mainCardSaham.setLow(0);
+                                mainCardReksadana.setOnemonth(0);
                             }
 
-                            if(!saham.isNull("Per")){
-                                mainCardSaham.setPer(saham.getDouble("Per"));
+                            if(!reksadana.isNull("YtdReturn")){
+                                mainCardReksadana.setYtd(reksadana.getDouble("YtdReturn"));
                             }
                             else{
-                                mainCardSaham.setPer(0);
+                                mainCardReksadana.setYtd(0);
                             }
 
-                            if(!saham.isNull("Pbr")){
-                                mainCardSaham.setPbv(saham.getDouble("Pbr"));
+                            if(!reksadana.isNull("YearlyReturn")){
+                                mainCardReksadana.setOneyear(reksadana.getDouble("YearlyReturn"));
                             }
                             else{
-                                mainCardSaham.setPbv(0);
+                                mainCardReksadana.setOneyear(0);
                             }
 
-                            if(!saham.isNull("Volume")){
-                                mainCardSaham.setVol(saham.getDouble("Volume"));
-                            }
-                            else{
-                                mainCardSaham.setVol(0);
-                            }
-
-                            if(!saham.isNull("Value")){
-                                mainCardSaham.setVal(saham.getDouble("Value"));
-                            }
-                            else{
-                                mainCardSaham.setVal(0);
-                            }
-
-
-                            if(!saham.isNull("OneDay")){
-                                mainCardSaham.setOneday(saham.getDouble("OneDay"));
-                            }
-                            else{
-                                mainCardSaham.setOneday(0);
-                            }
-
-                            if(!saham.isNull("OneMonth")){
-                                mainCardSaham.setOnemonth(saham.getDouble("OneMonth"));
-                            }
-                            else{
-                                mainCardSaham.setOnemonth(0);
-                            }
-
-                            if(!saham.isNull("Ytd")){
-                                mainCardSaham.setYtd(saham.getDouble("Ytd"));
-                            }
-                            else{
-                                mainCardSaham.setYtd(0);
-                            }
-
-                            if(!saham.isNull("OneYear")){
-                                mainCardSaham.setOneyear(saham.getDouble("OneYear"));
-                            }
-                            else{
-                                mainCardSaham.setOneyear(0);
-                            }
-
-                            if(!saham.isNull("Capitalization")){
-                                mainCardSaham.setCap(saham.getDouble("Capitalization"));
-                            }
-                            else{
-                                mainCardSaham.setCap(0);
-                            }
-
-                            mMainCardSaham.add(mainCardSaham);
+                            mMainCardReksadana.add(mainCardReksadana);
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -343,12 +285,24 @@ public class SahamFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            if(mMainCardSaham != null){
-                saveDataShared("maincardsaham", mMainCardSaham);
+            if(mMainCardReksadana != null){
+                for(MainCardReksadana data : mMainCardReksadana){
+                    if(data.getName().toLowerCase().contains("index") || data.getName().toLowerCase().contains("etf")){
+                        data.setCategory("ETF, Index");
+                    }
+                    else if(data.getName().toLowerCase().contains("syariah")){
+                        data.setCategory("Sharia");
+                    }
+                    else{
+                        data.setCategory("Konvensional");
+                    }
+                }
 
-                if(mMainCardSaham.size() > 0){
-                    mainCardSahamAdapter = new MainCardSahamAdapter(getContext(), mMainCardSaham);
-                    recyclerView.setAdapter(mainCardSahamAdapter);
+                saveDataShared("maincardreksadana", mMainCardReksadana);
+
+                if(mMainCardReksadana.size() > 0){
+                    mainCardReksadanaAdapter = new MainCardReksadanaAdapter(getContext(), mMainCardReksadana);
+                    recyclerView.setAdapter(mainCardReksadanaAdapter);
                 }
             }
         }
@@ -357,31 +311,37 @@ public class SahamFragment extends Fragment {
     private void DialogForm() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.find_saham_dialog, null);
+        View dialogView = inflater.inflate(R.layout.find_reksadana_dialog, null);
         dialog.setView(dialogView);
         dialog.setCancelable(true);
-        dialog.setTitle("Cari Saham");
+        dialog.setTitle("Cari Reksadana");
 
         SearchView svName = dialogView.findViewById(R.id.svName);
-        SearchView svCode = dialogView.findViewById(R.id.svCode);
-        SearchView svSectore = dialogView.findViewById(R.id.svSectore);
-        SearchView svSubIndustry = dialogView.findViewById(R.id.svSubIndustry);
+        SearchView svType = dialogView.findViewById(R.id.svType);
+        SearchView svCategory = dialogView.findViewById(R.id.svCategory);
+        SearchView svCurrency = dialogView.findViewById(R.id.svCurrency);
 
         dialog.setPositiveButton("Cari", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(mMainCardSaham.size() > 0){
-                    List<MainCardSaham> mMarketFilter = new ArrayList<>();
-                    for(MainCardSaham data : mMainCardSaham){
+                if(mMainCardReksadana.size() > 0){
+                    List<MainCardReksadana> mMarketFilter = new ArrayList<>();
+                    for(MainCardReksadana data : mMainCardReksadana){
+                        String cur = "IDR";
+
+                        if(data.getCur() == 1){
+                            cur = "USD";
+                        }
+
                         if((!svName.getQuery().toString().trim().isEmpty() && data.getName().toLowerCase().contains(svName.getQuery().toString().toLowerCase())) ||
-                                (!svCode.getQuery().toString().trim().isEmpty() && data.getCode().toLowerCase().contains(svCode.getQuery().toString().toLowerCase())) ||
-                                (!svSectore.getQuery().toString().trim().isEmpty() && data.getSectore().toLowerCase().contains(svSectore.getQuery().toString().toLowerCase())) ||
-                                (!svSubIndustry.getQuery().toString().trim().isEmpty() && data.getSubindustry().toLowerCase().contains(svSubIndustry.getQuery().toString().toLowerCase()))){
+                                (!svType.getQuery().toString().trim().isEmpty() && data.getType().toLowerCase().contains(svType.getQuery().toString().toLowerCase())) ||
+                                (!svCategory.getQuery().toString().trim().isEmpty() && data.getCategory().toLowerCase().contains(svCategory.getQuery().toString().toLowerCase())) ||
+                                (!svCurrency.getQuery().toString().trim().isEmpty() && cur.toLowerCase().contains(svCurrency.getQuery().toString().toLowerCase()))){
                             mMarketFilter.add(data);
                         }
                     }
-                    mainCardSahamAdapter.setFilter(mMarketFilter);
+                    mainCardReksadanaAdapter.setFilter(mMarketFilter);
                 }
 
                 dialog.dismiss();
@@ -391,7 +351,7 @@ public class SahamFragment extends Fragment {
         dialog.setNegativeButton("Reset", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mainCardSahamAdapter.setFilter(mMainCardSaham);
+                mainCardReksadanaAdapter.setFilter(mMainCardReksadana);
 
                 dialog.dismiss();
             }
@@ -399,10 +359,4 @@ public class SahamFragment extends Fragment {
 
         dialog.show();
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.right_menu, menu) ;
-    }
-
 }

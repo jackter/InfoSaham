@@ -1,8 +1,6 @@
-package com.alvarenstudio.pasardanawatcher.ui.main;
+package com.alvarenstudio.infosaham.ui.main;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -10,13 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.alvarenstudio.pasardanawatcher.R;
-import com.alvarenstudio.pasardanawatcher.ui.reksadana.ReksadanaFragment;
-import com.alvarenstudio.pasardanawatcher.ui.saham.SahamFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import com.alvarenstudio.infosaham.R;
+import com.alvarenstudio.infosaham.ui.reksadana.ReksadanaFragment;
+import com.alvarenstudio.infosaham.ui.saham.SahamFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

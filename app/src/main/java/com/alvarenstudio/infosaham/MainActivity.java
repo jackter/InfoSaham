@@ -1,7 +1,6 @@
-package com.alvarenstudio.pasardanawatcher;
+package com.alvarenstudio.infosaham;
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -13,8 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.alvarenstudio.pasardanawatcher.ui.main.SectionsPagerAdapter;
-import com.alvarenstudio.pasardanawatcher.databinding.ActivityMainBinding;
+import com.alvarenstudio.infosaham.ui.main.SectionsPagerAdapter;
+import com.alvarenstudio.infosaham.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
