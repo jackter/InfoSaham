@@ -2,7 +2,9 @@ package com.alvarenstudio.infosaham;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ConsoleMessage;
@@ -17,7 +20,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -27,19 +29,21 @@ import android.widget.Toast;
 
 import com.alvarenstudio.infosaham.model.LVDividend;
 import com.alvarenstudio.infosaham.model.MChart;
+import com.alvarenstudio.infosaham.model.MainCardSaham;
 import com.alvarenstudio.infosaham.model.XYMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,6 +58,7 @@ public class SahamDetailActivity extends AppCompatActivity {
     private String TAG = SahamDetailActivity.class.getSimpleName();
     private int id;
     private String code;
+    private boolean fav;
     private List<LVDividend> rowDividend;
     private List<MChart> chartList, chartLiveList;
     private LineChart mLineChart, mLineChartLive;
@@ -61,23 +66,20 @@ public class SahamDetailActivity extends AppCompatActivity {
     private ArrayList<String> y;
     private ProgressBar chartProgBar, chartProgBarLive;
     private TableLayout tableLayout;
-    private LinearLayout linLayChart, linLayChartLive;
-    private ImageButton imgBtnRefresh;
+    private LinearLayout linLayChart, linLayChartLive, linLayDiv;
     private Button btnShowChart, btnShowLiveChart;
     private WebView webView;
     private boolean flipChart = false, flipChartLive = false;
     private TextView tvName, tvSectore, tvSubIndustry, tvVol, tvVal, tvCap, tvDivTitle;
     private ArrayList<String> liveChartStringList = new ArrayList<>();
     private ArrayList<String> chartStringList = new ArrayList<>();
+    private MainCardSaham mainCardSaham;
+    private List<MainCardSaham> mMainCardSahamFav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saham_detail);
-
-        Intent mIntent = getIntent();
-        id = mIntent.getIntExtra("id", 0);
-        code = mIntent.getStringExtra("code");
 
         tvName = findViewById(R.id.tvName);
         tvSectore = findViewById(R.id.tvSectore);
@@ -85,14 +87,6 @@ public class SahamDetailActivity extends AppCompatActivity {
         tvVol = findViewById(R.id.tvVol);
         tvVal = findViewById(R.id.tvVal);
         tvCap = findViewById(R.id.tvCap);
-
-        tvName.setText(mIntent.getStringExtra("name"));
-        tvSectore.setText(mIntent.getStringExtra("sectore"));
-        tvSubIndustry.setText(mIntent.getStringExtra("subIndustry"));
-        tvVol.setText(mIntent.getStringExtra("vol"));
-        tvVal.setText(mIntent.getStringExtra("val"));
-        tvCap.setText(mIntent.getStringExtra("cap"));
-
         tableLayout = findViewById(R.id.tableLayoutDividen);
         mLineChartLive = findViewById(R.id.chartLive);
         mLineChart = findViewById(R.id.chart);
@@ -100,12 +94,34 @@ public class SahamDetailActivity extends AppCompatActivity {
         chartProgBarLive = findViewById(R.id.ivLoadingLive);
         linLayChart = findViewById(R.id.linLayChart);
         linLayChartLive = findViewById(R.id.linLayLiveChart);
+        linLayDiv = findViewById(R.id.linLayDiv);
         btnShowChart = findViewById(R.id.btnShowChart);
         btnShowLiveChart = findViewById(R.id.btnShowLiveChart);
-        imgBtnRefresh = findViewById(R.id.imgBtnRefresh);
         tvDivTitle = findViewById(R.id.divTitle);
-
         webView = findViewById(R.id.webView);
+
+        Typeface type = Typeface.createFromAsset(getAssets(),"fonts/baloo.ttf");
+        tvDivTitle.setTypeface(type);
+
+        Intent mIntent = getIntent();
+        mainCardSaham = (MainCardSaham) mIntent.getSerializableExtra("mainCardSaham");
+        id = mainCardSaham.getId();
+        code = mainCardSaham.getCode();
+        fav = mainCardSaham.isFav();
+        tvName.setText(mainCardSaham.getName());
+        tvSectore.setText(mainCardSaham.getSectore());
+        tvSubIndustry.setText(mainCardSaham.getSubindustry());
+        tvVol.setText(currencyFormat(mainCardSaham.getVol()));
+        tvVal.setText(currencyFormat(mainCardSaham.getVal()));
+        tvCap.setText(currencyFormat(mainCardSaham.getCap()));
+
+        loadDataShared();
+        for(MainCardSaham data: mMainCardSahamFav) {
+            if(data.getCode().equals(mainCardSaham.getCode())){
+                mainCardSaham.setFav(true);
+                fav = true;
+            }
+        }
 
         rowDividend = new ArrayList<LVDividend>();
 
@@ -156,6 +172,11 @@ public class SahamDetailActivity extends AppCompatActivity {
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public String currencyFormat(Double amount) {
+        DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
+        return formatter.format(amount).replace(".", "x").replace(",", ".").replace("x", ",");
     }
 
     private void webViewPg() {
@@ -224,26 +245,25 @@ public class SahamDetailActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(),
-                                        "Json parsing error: " + e.getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(getApplicationContext(),
+//                                        "Json parsing error: " + e.getMessage(),
+//                                        Toast.LENGTH_LONG).show();
+//                            }
+//                        });
                     }
                 } else {
                     Log.e(TAG, "Gagal mengambil data json dari server.");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Gagal mengambil data json dari server.",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getApplicationContext(),
+//                                    "Gagal mengambil data json dari server.",
+//                                    Toast.LENGTH_LONG).show();
+//                        }
+//                    });
                 }
 
                 if(chartList != null && flipChart){
@@ -274,6 +294,8 @@ public class SahamDetailActivity extends AppCompatActivity {
                             set1.setDrawCircles(false);
                             set1.setLineWidth(1.5f);
                             set1.setCircleRadius(4f);
+                            set1.setValueTextColor(Color.TRANSPARENT);
+                            set1.setDrawFilled(true);
                             LineData data = new LineData(y, set1);
                             mLineChart.clear();
                             mLineChart.setData(data);
@@ -310,6 +332,8 @@ public class SahamDetailActivity extends AppCompatActivity {
                             set1.setDrawCircles(false);
                             set1.setLineWidth(1.5f);
                             set1.setCircleRadius(4f);
+                            set1.setValueTextColor(Color.TRANSPARENT);
+                            set1.setDrawFilled(true);
                             LineData data = new LineData(y, set1);
                             mLineChartLive.clear();
                             mLineChartLive.setData(data);
@@ -385,26 +409,25 @@ public class SahamDetailActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(),
-                                        "Json parsing error: " + e.getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(getApplicationContext(),
+//                                        "Json parsing error: " + e.getMessage(),
+//                                        Toast.LENGTH_LONG).show();
+//                            }
+//                        });
                     }
                 } else {
                     Log.e(TAG, "Gagal mengambil data json dari server.");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Gagal mengambil data json dari server.",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getApplicationContext(),
+//                                    "Gagal mengambil data json dari server.",
+//                                    Toast.LENGTH_LONG).show();
+//                        }
+//                    });
                 }
             }
             catch (Exception e){
@@ -421,7 +444,7 @@ public class SahamDetailActivity extends AppCompatActivity {
             if(rowDividend != null){
                 if(rowDividend.size() > 0){
                     fillData(rowDividend);
-                    tvDivTitle.setVisibility(View.VISIBLE);
+                    linLayDiv.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -562,12 +585,111 @@ public class SahamDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(fav){
+            getMenuInflater().inflate(R.menu.right_menu_detail_fav, menu);
+        }
+        else {
+            getMenuInflater().inflate(R.menu.right_menu_detail, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.favorite:
+                if(fav){
+                    fav = false;
+                    updateSahamFav(fav);
+                    Toast.makeText(getApplicationContext(),"Saham dihapus dari favorite", Toast.LENGTH_LONG).show();
+                    invalidateOptionsMenu();
+                }
+                else{
+                    fav = true;
+                    updateSahamFav(fav);
+                    Toast.makeText(getApplicationContext(),"Saham ditambah ke favorite", Toast.LENGTH_LONG).show();
+                    invalidateOptionsMenu();
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateSahamFav(boolean type) {
+        loadDataShared();
+
+        if(type) {
+            mMainCardSahamFav.add(mainCardSaham);
+        }
+        else {
+            List<MainCardSaham> mMainCardSahamFavTemp = new ArrayList<>();
+
+            for(MainCardSaham data : mMainCardSahamFav){
+                if(!data.getCode().equals(mainCardSaham.getCode())) {
+                    mMainCardSahamFavTemp.add(data);
+                }
+            }
+
+            mMainCardSahamFav = mMainCardSahamFavTemp;
+        }
+
+        saveDataShared("maincardsahamfav", mMainCardSahamFav);
+    }
+
+    private void loadDataShared() {
+        // method to load arraylist from shared prefs
+        // initializing our shared prefs with name as
+        // shared preferences.
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+
+        // creating a variable for gson.
+        Gson gson = new Gson();
+
+        // below line is to get to string present from our
+        // shared prefs if not present setting it as null.
+        String json = sharedPreferences.getString("maincardsahamfav", null);
+
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<List<MainCardSaham>>() {}.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        mMainCardSahamFav = gson.fromJson(json, type);
+
+        // checking below if the array list is empty or not
+        if (mMainCardSahamFav == null) {
+            // if the array list is empty
+            // creating a new array list.
+            mMainCardSahamFav = new ArrayList<>();
+        }
+    }
+
+    private void saveDataShared(String nama, Object card) {
+        // method for saving the data in array list.
+        // creating a variable for storing data in
+        // shared preferences.
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+
+        // creating a variable for editor to
+        // store data in shared preferences.
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // creating a new variable for gson.
+        Gson gson = new Gson();
+
+        // getting data from gson and storing it in a string.
+        String json = gson.toJson(card);
+
+        // below line is to save data in shared
+        // prefs in the form of string.
+        editor.putString(nama, json);
+
+        // below line is to apply changes
+        // and save data in shared prefs.
+        editor.apply();
     }
 }

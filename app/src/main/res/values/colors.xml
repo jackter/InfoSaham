@@ -8,7 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="accent">#1da1f2</color>
-    <color name="pink">#D81B60</color>
+    <color name="heart_red">#D81B60</color>
+    <color name="pink">#f766ae</color>
     <color name="blue">#1da1f2</color>
     <color name="dark_blue">#3767af</color>
 </resources>

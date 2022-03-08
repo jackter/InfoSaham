@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="40dp" >
+    android:layout_height="50dp" >
 
-    <TextView
-        android:id="@+id/tvContent"
+    <LinearLayout
+        android:id="@+id/id_msg"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text=""
-        android:textSize="12dp"
-        android:textColor="@android:color/black"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_marker_arrow"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="Waktu 14:10\nHarga 12500"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+    </LinearLayout>
 
 </RelativeLayout>

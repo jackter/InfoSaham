@@ -1,6 +1,8 @@
 package com.alvarenstudio.infosaham.model;
 
-public class MainCardSaham {
+import java.io.Serializable;
+
+public class MainCardSaham implements Serializable {
     private int id;
     private String name;
     private String code;
@@ -20,6 +22,7 @@ public class MainCardSaham {
     private double ytd;
     private double oneyear;
     private double cap;
+    private boolean fav;
 
     public MainCardSaham() {
     }
@@ -174,5 +177,13 @@ public class MainCardSaham {
 
     public void setCap(double cap) {
         this.cap = cap;
+    }
+
+    public boolean isFav() {
+        return fav;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
     }
 }

@@ -8,6 +8,7 @@ import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class XYMarkerView extends MarkerView {
@@ -26,7 +27,7 @@ public class XYMarkerView extends MarkerView {
     // content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        tvContent.setText( this.chartStringList.get(highlight.getXIndex()) + " : " + Math.round(e.getVal())); // set the entry-value as the display text
+        tvContent.setText(this.chartStringList.get(highlight.getXIndex()) + "\n" + currencyFormat(Math.round(e.getVal()))); // set the entry-value as the display text
     }
 
     @Override
@@ -39,5 +40,10 @@ public class XYMarkerView extends MarkerView {
     public int getYOffset(float ypos) {
         // this will cause the marker-view to be above the selected value
         return -getHeight();
+    }
+
+    public String currencyFormat(int amount) {
+        DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
+        return formatter.format(amount).replace(".", "x").replace(",", ".").replace("x", ",");
     }
 }

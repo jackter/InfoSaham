@@ -241,23 +241,44 @@
         android:backgroundTint="@color/accent"
         android:layout_margin="10dp"
         android:textColor="#fff"/>
-
     <WebView
         android:id="@+id/webView"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="300dp" />
 
-    <TextView
-        android:id="@+id/divTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linLayDiv"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/blue"
-        android:textStyle="bold"
-        android:textSize="8pt"
         android:visibility="gone"
-        android:layout_marginLeft="10dp"
-        android:text="# DIVIDEND YIELD"/>
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_list_alt_24"/>
+
+            <TextView
+                android:id="@+id/divTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="8pt"
+                android:text="DIVIDEND YIELD"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/darker_gray"/>
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/layout"

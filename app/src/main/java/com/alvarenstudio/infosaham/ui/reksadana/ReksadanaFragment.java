@@ -194,6 +194,7 @@ public class ReksadanaFragment extends Fragment {
                             JSONObject reksadana = listReksadana.getJSONObject(i);
                             mainCardReksadana = new MainCardReksadana();
 
+                            mainCardReksadana.setId(reksadana.getInt("Id"));
                             mainCardReksadana.setName(reksadana.getString("Name"));
                             mainCardReksadana.setType(reksadana.getString("ConservativeCategory"));
                             mainCardReksadana.setCategory(reksadana.getString("Type"));

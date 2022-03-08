@@ -1,6 +1,9 @@
 package com.alvarenstudio.infosaham.model;
 
-public class MainCardReksadana {
+import java.io.Serializable;
+
+public class MainCardReksadana implements Serializable {
+    private int id;
     private String name;
     private String category;
     private String type;
@@ -12,8 +15,17 @@ public class MainCardReksadana {
     private double onemonth;
     private double ytd;
     private double oneyear;
+    private boolean fav;
 
     public MainCardReksadana() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -33,7 +45,12 @@ public class MainCardReksadana {
     }
 
     public String getType() {
-        return type;
+        if(type.equals("Pendapatan Tetap")) {
+            return type + " / Obligasi";
+        }
+        else{
+            return type;
+        }
     }
 
     public void setType(String type) {
@@ -102,5 +119,13 @@ public class MainCardReksadana {
 
     public void setOneyear(double oneyear) {
         this.oneyear = oneyear;
+    }
+
+    public boolean isFav() {
+        return fav;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
     }
 }

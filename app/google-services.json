@@ -1,20 +1,21 @@
 {
   "project_info": {
-    "project_number": "176498535605",
-    "project_id": "info-saham",
-    "storage_bucket": "info-saham.appspot.com"
+    "project_number": "911901696117",
+    "firebase_url": "https://info-saham-f1de9-default-rtdb.firebaseio.com",
+    "project_id": "info-saham-f1de9",
+    "storage_bucket": "info-saham-f1de9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:176498535605:android:f550b7ec31eb8f40ad62fc",
+        "mobilesdk_app_id": "1:911901696117:android:b3428aa618426e506d983c",
         "android_client_info": {
           "package_name": "com.alvarenstudio.infosaham"
         }
       },
       "oauth_client": [
         {
-          "client_id": "176498535605-pnml7tuslctdsgk75ho9v1gl25up7inh.apps.googleusercontent.com",
+          "client_id": "911901696117-6rgrurf0697vg9lf53ji7phbc41lt85j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.alvarenstudio.infosaham",
@@ -22,20 +23,20 @@
           }
         },
         {
-          "client_id": "176498535605-lrb3jfdhar1q0ke1941hm4qdj5nug2qi.apps.googleusercontent.com",
+          "client_id": "911901696117-6o6mh9ij70siiajppc22fg5sm2tbd76j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCp6m-XNEPzZMV931MeQBfU4DyOYWn9Hh0"
+          "current_key": "AIzaSyBqb7uud9rZ6cbYamk9TDOEEAJdScUc3LQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "176498535605-lrb3jfdhar1q0ke1941hm4qdj5nug2qi.apps.googleusercontent.com",
+              "client_id": "911901696117-6o6mh9ij70siiajppc22fg5sm2tbd76j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

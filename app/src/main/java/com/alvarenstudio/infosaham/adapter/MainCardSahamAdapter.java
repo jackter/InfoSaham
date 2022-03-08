@@ -13,12 +13,20 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alvarenstudio.infosaham.MainActivity;
+import com.alvarenstudio.infosaham.MsgActivity;
 import com.alvarenstudio.infosaham.R;
 import com.alvarenstudio.infosaham.SahamDetailActivity;
 import com.alvarenstudio.infosaham.model.MainCardSaham;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.VideoController;
+import com.google.android.gms.ads.VideoOptions;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +42,18 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
 
     public class viewHolder extends RecyclerView.ViewHolder{
         public TextView tvName, tvSectore, tvSubIndustry, tvLast, tvPrev, tvOpen, tvHigh, tvLow, tvPER, tvPBV, tvVol, tvVal, tv1Day, tv1Month, tvYtd, tv1Year, tvCap;
-        public CardView cardSaham;
+        public CardView cardSaham, cardAdsGoogle;
         public LinearLayout linLayoutMC;
+        public NativeExpressAdView nativeAdView;
+        public VideoController adVideoController;
 
         public viewHolder(View itemView) {
             super(itemView);
 
             linLayoutMC = itemView.findViewById(R.id.linLayoutMC);
             cardSaham = itemView.findViewById(R.id.card_saham);
+            cardAdsGoogle = itemView.findViewById(R.id.card_ads_google);
+            nativeAdView = itemView.findViewById(R.id.nativeAdView);
             tvName = itemView.findViewById(R.id.tvName);
             tvSectore = itemView.findViewById(R.id.tvSectore);
             tvSubIndustry = itemView.findViewById(R.id.tvSubIndustry);
@@ -74,19 +86,34 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
     public void onBindViewHolder(@NonNull @NotNull viewHolder holder, int position) {
         MainCardSaham mainCardSaham = mMainCardSahams.get(position);
 
+        if(position == 0) {
+            holder.nativeAdView.setVideoOptions(new VideoOptions.Builder()
+                    .setStartMuted(true)
+                    .build());
+
+            holder.adVideoController = holder.nativeAdView.getVideoController();
+            holder.adVideoController.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+                @Override
+                public void onVideoEnd() {
+                    super.onVideoEnd();
+                }
+            });
+
+            holder.nativeAdView.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    holder.cardAdsGoogle.setVisibility(View.VISIBLE);
+                }
+            });
+
+            holder.nativeAdView.loadAd(new AdRequest.Builder().build());
+        }
+
         holder.cardSaham.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SahamDetailActivity.class);
-                intent.putExtra("id", mainCardSaham.getId());
-                intent.putExtra("code", mainCardSaham.getCode());
-                intent.putExtra("name", mainCardSaham.getName() + " (" + mainCardSaham.getCode() + ")");
-                intent.putExtra("sectore", mainCardSaham.getSectore());
-                intent.putExtra("subIndustry", mainCardSaham.getSubindustry());
-                intent.putExtra("vol", currencyFormat(mainCardSaham.getVol()));
-                intent.putExtra("val", currencyFormat(mainCardSaham.getVal()));
-                intent.putExtra("cap", currencyFormat(mainCardSaham.getCap()));
-
+                intent.putExtra("mainCardSaham", (Serializable) mainCardSaham);
                 mContext.startActivity(intent);
             }
         });

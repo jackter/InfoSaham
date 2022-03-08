@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:layout_marginLeft="50dp">
+
+    <LinearLayout
+        android:id="@+id/id_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_right"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nama_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="nama" />
+
+        <TextView
+            android:id="@+id/show_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:autoLink="all"
+            android:textIsSelectable="true"
+            android:text="hello"
+            android:maxLines="5"
+            android:textColor="#000"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_show_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="View More..."
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:visibility="gone"
+            android:textColor="@android:color/holo_blue_light"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
+
+</RelativeLayout>
