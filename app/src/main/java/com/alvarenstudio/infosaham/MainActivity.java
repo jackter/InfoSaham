@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.alvarenstudio.infosaham.model.User;
 import com.google.android.gms.ads.AdRequest;
@@ -31,7 +32,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private FloatingActionButton fab1, fab2, fabf1;
+    private FloatingActionButton fab1, fab2, fabf;
+    private Button menuSort1, menuSort2, menuRefresh1, menuRefresh2;
     private ViewPager viewPager;
     private Toolbar toolbar;
     private FirebaseUser fBaseUser;
@@ -55,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         fab1 = binding.fab1;
         fab2 = binding.fab2;
-        fabf1 = binding.fabf;
+        fabf = binding.fabf;
 
-        fabf1.setOnClickListener(new View.OnClickListener() {
+        fabf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(pos == 0){
@@ -138,10 +140,31 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, MainActivity.class));
                     finish();
                 }
+                else if (item.getItemId() == R.id.refresh){
+                    if(pos == 0) {
+                        menuRefresh1.performClick();
+                    }
+                    else {
+                        menuRefresh2.performClick();
+                    }
+                }
+                else if (item.getItemId() == R.id.sort){
+                    if(pos == 0) {
+                        menuSort1.performClick();
+                    }
+                    else {
+                        menuSort2.performClick();
+                    }
+                }
 
                 return false;
             }
         });
+
+        menuRefresh1 = findViewById(R.id.menuRefresh1);
+        menuSort1 = findViewById(R.id.menuSort1);
+        menuRefresh2 = findViewById(R.id.menuRefresh2);
+        menuSort2 = findViewById(R.id.menuSort2);
 
         MobileAds.initialize(this, "ca-app-pub-9017780985696575~3750944100");
 
@@ -150,12 +173,34 @@ public class MainActivity extends AppCompatActivity {
         adView.loadAd(adRequest);
     }
 
+    public int getPos() {
+        return pos;
+    }
+
     public FloatingActionButton getFab(int idx){
         if(idx == 1){
             return this.fab1;
         }
         else{
             return this.fab2;
+        }
+    }
+
+    public Button getMenuRefresh(int idx) {
+        if(idx == 1){
+            return this.menuRefresh1;
+        }
+        else{
+            return this.menuRefresh2;
+        }
+    }
+
+    public Button getMenuSort(int idx) {
+        if(idx == 1){
+            return this.menuSort1;
+        }
+        else{
+            return this.menuSort2;
         }
     }
 

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.alvarenstudio.infosaham.HttpHandler;
@@ -23,6 +24,8 @@ import com.alvarenstudio.infosaham.MainActivity;
 import com.alvarenstudio.infosaham.R;
 import com.alvarenstudio.infosaham.adapter.MainCardReksadanaAdapter;
 import com.alvarenstudio.infosaham.model.MainCardReksadana;
+import com.alvarenstudio.infosaham.model.MainCardSaham;
+import com.alvarenstudio.infosaham.ui.saham.SahamFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -32,6 +35,8 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -55,6 +60,8 @@ public class ReksadanaFragment extends Fragment {
     private List<MainCardReksadana> mMainCardReksadana;
     private MainCardReksadanaAdapter mainCardReksadanaAdapter;
     private String TAG = ReksadanaFragment.class.getSimpleName();
+    private int sort = 0;
+    private int sortType = 0;
 
     public ReksadanaFragment() {
         // Required empty public constructor
@@ -90,6 +97,20 @@ public class ReksadanaFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 DialogForm();
+            }
+        });
+
+        ((MainActivity) getContext()).getMenuRefresh(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new doItJsonReksadana().execute();
+            }
+        });
+
+        ((MainActivity) getContext()).getMenuSort(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFormSort();
             }
         });
 
@@ -359,5 +380,160 @@ public class ReksadanaFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    private void DialogFormSort() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.sort_dialog, null);
+        dialog.setView(dialogView);
+        dialog.setCancelable(true);
+        dialog.setTitle("Sort Reksadana");
+
+        RadioButton rbAsc = dialogView.findViewById(R.id.radBatAsc);
+        RadioButton rbDesc = dialogView.findViewById(R.id.radBatDesc);
+        RadioButton rbCode = dialogView.findViewById(R.id.radBatCode);
+        RadioButton rb1Day = dialogView.findViewById(R.id.radBat1Day);
+        RadioButton rb1Month = dialogView.findViewById(R.id.radBat1Month);
+        RadioButton rb1Year = dialogView.findViewById(R.id.radBat1Year);
+
+        rbCode.setText("Name");
+
+        if(sortType == 0) {
+            rbAsc.setChecked(true);
+            rbDesc.setChecked(false);
+        }
+        else{
+            rbAsc.setChecked(false);
+            rbDesc.setChecked(true);
+        }
+
+        if(sort == 0) {
+            rbCode.setChecked(true);
+        }
+        else if(sort == 1) {
+            rb1Day.setChecked(true);
+        }
+        else if(sort == 2) {
+            rb1Month.setChecked(true);
+        }
+        else {
+            rb1Year.setChecked(true);
+        }
+
+        rbAsc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortType = 0;
+                rbAsc.setChecked(true);
+            }
+        });
+
+        rbDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortType = 1;
+                rbDesc.setChecked(true);
+            }
+        });
+
+        rbCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 0;
+                rbCode.setChecked(true);
+            }
+        });
+
+        rb1Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 1;
+                rb1Day.setChecked(true);
+            }
+        });
+
+        rb1Month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 2;
+                rb1Month.setChecked(true);
+            }
+        });
+
+        rb1Year.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 3;
+                rb1Year.setChecked(true);
+            }
+        });
+
+        dialog.setPositiveButton("Sort", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(mMainCardReksadana.size() > 0){
+                    sortMainCard();
+                    mainCardReksadanaAdapter.setFilter(mMainCardReksadana);
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setNegativeButton("Reset", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sort = 0;
+                sortType = 0;
+
+                sortMainCard();
+                mainCardReksadanaAdapter.setFilter(mMainCardReksadana);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void sortMainCard() {
+        Collections.sort(mMainCardReksadana, new Comparator<MainCardReksadana>() {
+            @Override
+            public int compare(MainCardReksadana t1, MainCardReksadana t2) {
+                if(sort == 1) {
+                    if(sortType == 0) {
+                        return Double.compare(t1.getOneday(), t2.getOneday());
+                    }
+                    else {
+                        return Double.compare(t2.getOneday(), t1.getOneday());
+                    }
+                }
+                else if(sort == 2) {
+                    if(sortType == 0) {
+                        return Double.compare(t1.getOnemonth(), t2.getOnemonth());
+                    }
+                    else {
+                        return Double.compare(t2.getOnemonth(), t1.getOnemonth());
+                    }
+                }
+                else if(sort == 3) {
+                    if(sortType == 0) {
+                        return Double.compare(t1.getOneyear(), t2.getOneyear());
+                    }
+                    else {
+                        return Double.compare(t2.getOneyear(), t1.getOneyear());
+                    }
+                }
+                else {
+                    if(sortType == 0) {
+                        return t1.getName().compareTo(t2.getName());
+                    }
+                    else {
+                        return t2.getName().compareTo(t1.getName());
+                    }
+                }
+            }
+        });
     }
 }
