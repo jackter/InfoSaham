@@ -2,7 +2,9 @@ package com.alvarenstudio.infosaham.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alvarenstudio.infosaham.MainActivity;
-import com.alvarenstudio.infosaham.MsgActivity;
 import com.alvarenstudio.infosaham.R;
 import com.alvarenstudio.infosaham.SahamDetailActivity;
 import com.alvarenstudio.infosaham.model.MainCardSaham;
@@ -86,7 +86,7 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
     public void onBindViewHolder(@NonNull @NotNull viewHolder holder, int position) {
         MainCardSaham mainCardSaham = mMainCardSahams.get(position);
 
-        if(position == 0) {
+        if(position == 0 && loadPreferencesInt("show_ads") == 1) {
             holder.nativeAdView.setVideoOptions(new VideoOptions.Builder()
                     .setStartMuted(true)
                     .build());
@@ -169,5 +169,13 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
     public String decimalFormat(Double amount) {
         DecimalFormat formatter = new DecimalFormat("###,###,##0.0000");
         return formatter.format(amount).replace(".", "x").replace(",", ".").replace("x", ",");
+    }
+
+    private int loadPreferencesInt(String key) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(mContext.getApplicationContext());
+        int value = sharedPreferences.getInt(key, 0);
+
+        return value;
     }
 }

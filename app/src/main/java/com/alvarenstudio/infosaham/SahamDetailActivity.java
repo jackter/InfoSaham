@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
@@ -22,6 +23,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -56,6 +59,7 @@ import java.util.TimeZone;
 
 public class SahamDetailActivity extends AppCompatActivity {
     private String TAG = SahamDetailActivity.class.getSimpleName();
+    private ScrollView scrollView;
     private int id;
     private String code;
     private boolean fav;
@@ -75,12 +79,16 @@ public class SahamDetailActivity extends AppCompatActivity {
     private ArrayList<String> chartStringList = new ArrayList<>();
     private MainCardSaham mainCardSaham;
     private List<MainCardSaham> mMainCardSahamFav;
+    private RadioButton rb1Year, rb3Year, rb5Year;
+    private int rbChart = 1;
+    private SharedPref sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saham_detail);
 
+        scrollView = findViewById(R.id.scrollView);
         tvName = findViewById(R.id.tvName);
         tvSectore = findViewById(R.id.tvSectore);
         tvSubIndustry = findViewById(R.id.tvSubIndustry);
@@ -115,7 +123,9 @@ public class SahamDetailActivity extends AppCompatActivity {
         tvVal.setText(currencyFormat(mainCardSaham.getVal()));
         tvCap.setText(currencyFormat(mainCardSaham.getCap()));
 
-        loadDataShared();
+        sharedPref = new SharedPref(getApplicationContext());
+        mMainCardSahamFav = sharedPref.loadDataSharedMainCardSaham("maincardsahamfav");
+
         for(MainCardSaham data: mMainCardSahamFav) {
             if(data.getCode().equals(mainCardSaham.getCode())){
                 mainCardSaham.setFav(true);
@@ -128,17 +138,28 @@ public class SahamDetailActivity extends AppCompatActivity {
         new doItDiv().execute();
 
         this.webViewPg();
-        this.chart1Period();
         this.chart3Years();
+
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(flipChart || flipChartLive) {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        });
 
         btnShowLiveChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!flipChartLive) {
                     flipChartLive = true;
-                    if(chartList == null) {
-                        webView.loadUrl("https://idx.co.id/umbraco/Surface/Helper/GetStockChart?indexCode=" + code);
-                    }
+
+                    chart1Period();
+                    webView.loadUrl("https://idx.co.id/umbraco/Surface/Helper/GetStockChart?indexCode=" + code);
 
                     btnShowLiveChart.setText("HIDE LIVE CHART");
                     linLayChartLive.setVisibility(View.VISIBLE);
@@ -157,7 +178,15 @@ public class SahamDetailActivity extends AppCompatActivity {
                 if(!flipChart) {
                     flipChart = true;
                     if(chartList == null) {
-                        webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
+                        if(rbChart == 1) {
+                            webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=250");
+                        }
+                        else if (rbChart == 2) {
+                            webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
+                        }
+                        else {
+                            webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=1250");
+                        }
                     }
 
                     btnShowChart.setText("HIDE CHART");
@@ -168,6 +197,38 @@ public class SahamDetailActivity extends AppCompatActivity {
                     linLayChart.setVisibility(View.GONE);
                     flipChart = false;
                 }
+            }
+        });
+
+        rb1Year = findViewById(R.id.radBat1Year);
+        rb3Year = findViewById(R.id.radBat3Year);
+        rb5Year = findViewById(R.id.radBat5Year);
+
+        rb1Year.setChecked(true);
+        rb1Year.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rbChart = 1;
+                rb1Year.setChecked(true);
+                webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=250");
+            }
+        });
+
+        rb3Year.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rbChart = 2;
+                rb3Year.setChecked(true);
+                webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
+            }
+        });
+
+        rb5Year.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rbChart = 3;
+                rb5Year.setChecked(true);
+                webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=1250");
             }
         });
 
@@ -245,25 +306,9 @@ public class SahamDetailActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Toast.makeText(getApplicationContext(),
-//                                        "Json parsing error: " + e.getMessage(),
-//                                        Toast.LENGTH_LONG).show();
-//                            }
-//                        });
                     }
                 } else {
                     Log.e(TAG, "Gagal mengambil data json dari server.");
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Toast.makeText(getApplicationContext(),
-//                                    "Gagal mengambil data json dari server.",
-//                                    Toast.LENGTH_LONG).show();
-//                        }
-//                    });
                 }
 
                 if(chartList != null && flipChart){
@@ -409,25 +454,9 @@ public class SahamDetailActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Toast.makeText(getApplicationContext(),
-//                                        "Json parsing error: " + e.getMessage(),
-//                                        Toast.LENGTH_LONG).show();
-//                            }
-//                        });
                     }
                 } else {
                     Log.e(TAG, "Gagal mengambil data json dari server.");
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Toast.makeText(getApplicationContext(),
-//                                    "Gagal mengambil data json dari server.",
-//                                    Toast.LENGTH_LONG).show();
-//                        }
-//                    });
                 }
             }
             catch (Exception e){
@@ -620,7 +649,7 @@ public class SahamDetailActivity extends AppCompatActivity {
     }
 
     private void updateSahamFav(boolean type) {
-        loadDataShared();
+        mMainCardSahamFav = sharedPref.loadDataSharedMainCardSaham("maincardsahamfav");
 
         if(type) {
             mMainCardSahamFav.add(mainCardSaham);
@@ -638,34 +667,6 @@ public class SahamDetailActivity extends AppCompatActivity {
         }
 
         saveDataShared("maincardsahamfav", mMainCardSahamFav);
-    }
-
-    private void loadDataShared() {
-        // method to load arraylist from shared prefs
-        // initializing our shared prefs with name as
-        // shared preferences.
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
-
-        // creating a variable for gson.
-        Gson gson = new Gson();
-
-        // below line is to get to string present from our
-        // shared prefs if not present setting it as null.
-        String json = sharedPreferences.getString("maincardsahamfav", null);
-
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<List<MainCardSaham>>() {}.getType();
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        mMainCardSahamFav = gson.fromJson(json, type);
-
-        // checking below if the array list is empty or not
-        if (mMainCardSahamFav == null) {
-            // if the array list is empty
-            // creating a new array list.
-            mMainCardSahamFav = new ArrayList<>();
-        }
     }
 
     private void saveDataShared(String nama, Object card) {

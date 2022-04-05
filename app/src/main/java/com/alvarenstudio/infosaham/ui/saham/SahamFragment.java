@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.alvarenstudio.infosaham.HttpHandler;
 import com.alvarenstudio.infosaham.MainActivity;
 import com.alvarenstudio.infosaham.R;
+import com.alvarenstudio.infosaham.SharedPref;
 import com.alvarenstudio.infosaham.adapter.MainCardSahamAdapter;
 import com.alvarenstudio.infosaham.model.MChart;
 import com.alvarenstudio.infosaham.model.MainCardSaham;
@@ -64,6 +65,7 @@ public class SahamFragment extends Fragment {
     private String TAG = SahamFragment.class.getSimpleName();
     private int sort = 0;
     private int sortType = 0;
+    private SharedPref sharedPref;
 
     public SahamFragment() {
         // Required empty public constructor
@@ -117,8 +119,6 @@ public class SahamFragment extends Fragment {
         });
 
         new doItJsonSaham().execute();
-
-        setMenuVisibility(true);
     }
 
     @Override
@@ -134,66 +134,13 @@ public class SahamFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyleview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        this.loadDataShared();
-    }
+        sharedPref = new SharedPref(this.getContext());
+        mMainCardSaham = sharedPref.loadDataSharedMainCardSaham("maincardsaham");
 
-    private void loadDataShared() {
-        // method to load arraylist from shared prefs
-        // initializing our shared prefs with name as
-        // shared preferences.
-        SharedPreferences sharedPreferences = this.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
-
-        // creating a variable for gson.
-        Gson gson = new Gson();
-
-        // below line is to get to string present from our
-        // shared prefs if not present setting it as null.
-        String json = sharedPreferences.getString("maincardsaham", null);
-
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<List<MainCardSaham>>() {}.getType();
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        mMainCardSaham = gson.fromJson(json, type);
-
-        // checking below if the array list is empty or not
-        if (mMainCardSaham == null) {
-            // if the array list is empty
-            // creating a new array list.
-            mMainCardSaham = new ArrayList<>();
+        if(mMainCardSaham.size() > 0){
+            mainCardSahamAdapter = new MainCardSahamAdapter(getContext(), mMainCardSaham);
+            recyclerView.setAdapter(mainCardSahamAdapter);
         }
-        else {
-            if(mMainCardSaham.size() > 0){
-                mainCardSahamAdapter = new MainCardSahamAdapter(getContext(), mMainCardSaham);
-                recyclerView.setAdapter(mainCardSahamAdapter);
-            }
-        }
-    }
-
-    private void saveDataShared(String nama, Object card) {
-        // method for saving the data in array list.
-        // creating a variable for storing data in
-        // shared preferences.
-        SharedPreferences sharedPreferences = this.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
-
-        // creating a variable for editor to
-        // store data in shared preferences.
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // creating a new variable for gson.
-        Gson gson = new Gson();
-
-        // getting data from gson and storing it in a string.
-        String json = gson.toJson(card);
-
-        // below line is to save data in shared
-        // prefs in the form of string.
-        editor.putString(nama, json);
-
-        // below line is to apply changes
-        // and save data in shared prefs.
-        editor.apply();
     }
 
     private class doItJsonSaham extends AsyncTask<Void, Void, Void> {
@@ -362,7 +309,7 @@ public class SahamFragment extends Fragment {
             super.onPostExecute(aVoid);
 
             if(mMainCardSaham != null){
-                saveDataShared("maincardsaham", mMainCardSaham);
+                sharedPref.saveDataShared("maincardsaham", mMainCardSaham);
 
                 if(mMainCardSaham.size() > 0){
                     mainCardSahamAdapter = new MainCardSahamAdapter(getContext(), mMainCardSaham);

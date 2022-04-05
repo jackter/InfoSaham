@@ -4,11 +4,13 @@
     <item android:id="@+id/refresh"
         android:title="Refresh"/>
 
-    <item android:id="@+id/catatan"
-        android:title="Catatan"/>
-
     <item android:id="@+id/signout"
         android:title="Sign Out"/>
+
+    <item android:id="@+id/catatan"
+        android:icon="@drawable/ic_baseline_sticky_note_2_24"
+        android:title="Catatan"
+        app:showAsAction="always"/>
 
     <item android:id="@+id/chat"
         android:icon="@drawable/ic_baseline_chat_24"
@@ -17,6 +19,6 @@
 
     <item android:id="@+id/sort"
         android:icon="@drawable/ic_baseline_sort_24"
-        android:title="Chat Room"
+        android:title="Sort"
         app:showAsAction="always"/>
 </menu>

@@ -274,7 +274,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="Data Grafik Saham 1 Tahun"
+            android:text="Data Grafik Reksadana 1 Tahun"
             android:layout_gravity="center_horizontal"/>
         <androidx.cardview.widget.CardView
             android:id="@+id/cardChart"

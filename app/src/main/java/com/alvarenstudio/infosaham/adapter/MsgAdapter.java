@@ -1,6 +1,7 @@
 package com.alvarenstudio.infosaham.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,16 +77,16 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.viewHolder> {
 
         holder.show_msg.setText(chat.getMsg());
 
-        if(chat.getTimestamp() != null){
-            holder.user_msg.setText(chat.getSender() + " at " + timestampMsgToDT(chat.getTimestamp()));
-        }
-        else if(chat.getTime() != null) {
-            holder.user_msg.setText(chat.getSender() + " at " + chat.getTime());
+        if(chat.getIs_admin() == 1) {
+            holder.show_msg.setTextColor(Color.RED);
+            holder.user_msg.setTextColor(Color.RED);
         }
         else{
-            holder.user_msg.setText(chat.getSender());
+            holder.show_msg.setTextColor(Color.BLACK);
+            holder.user_msg.setTextColor(Color.GRAY);
         }
 
+        holder.user_msg.setText(chat.getSender() + " at " + timestampMsgToDT(chat.getTimestamp()));
         holder.name_msg = chat.getSender();
 
         holder.show_msg.setOnLongClickListener(new View.OnLongClickListener() {

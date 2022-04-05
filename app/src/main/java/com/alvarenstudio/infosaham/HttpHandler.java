@@ -47,7 +47,7 @@ public class HttpHandler {
         return response;
     }
 
-    public String makeServiceCall2(String reqUrl) {
+    public String makeServiceCallWithCookie(String reqUrl) {
         String response = null;
         try {
             URL url = new URL(reqUrl);

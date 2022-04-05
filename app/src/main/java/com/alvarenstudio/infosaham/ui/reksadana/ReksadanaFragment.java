@@ -22,7 +22,9 @@ import android.widget.Toast;
 import com.alvarenstudio.infosaham.HttpHandler;
 import com.alvarenstudio.infosaham.MainActivity;
 import com.alvarenstudio.infosaham.R;
+import com.alvarenstudio.infosaham.SharedPref;
 import com.alvarenstudio.infosaham.adapter.MainCardReksadanaAdapter;
+import com.alvarenstudio.infosaham.adapter.MainCardSahamAdapter;
 import com.alvarenstudio.infosaham.model.MainCardReksadana;
 import com.alvarenstudio.infosaham.model.MainCardSaham;
 import com.alvarenstudio.infosaham.ui.saham.SahamFragment;
@@ -62,6 +64,7 @@ public class ReksadanaFragment extends Fragment {
     private String TAG = ReksadanaFragment.class.getSimpleName();
     private int sort = 0;
     private int sortType = 0;
+    private SharedPref sharedPref;
 
     public ReksadanaFragment() {
         // Required empty public constructor
@@ -129,66 +132,13 @@ public class ReksadanaFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyleview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        this.loadDataShared();
-    }
+        sharedPref = new SharedPref(this.getContext());
+        mMainCardReksadana = sharedPref.loadDataSharedMainCardReksadana("maincardreksadana");
 
-    private void loadDataShared() {
-        // method to load arraylist from shared prefs
-        // initializing our shared prefs with name as
-        // shared preferences.
-        SharedPreferences sharedPreferences = this.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
-
-        // creating a variable for gson.
-        Gson gson = new Gson();
-
-        // below line is to get to string present from our
-        // shared prefs if not present setting it as null.
-        String json = sharedPreferences.getString("maincardreksadana", null);
-
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<List<MainCardReksadana>>() {}.getType();
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        mMainCardReksadana = gson.fromJson(json, type);
-
-        // checking below if the array list is empty or not
-        if (mMainCardReksadana == null) {
-            // if the array list is empty
-            // creating a new array list.
-            mMainCardReksadana = new ArrayList<>();
+        if(mMainCardReksadana.size() > 0){
+            mainCardReksadanaAdapter = new MainCardReksadanaAdapter(getContext(), mMainCardReksadana);
+            recyclerView.setAdapter(mainCardReksadanaAdapter);
         }
-        else {
-            if(mMainCardReksadana.size() > 0){
-                mainCardReksadanaAdapter = new MainCardReksadanaAdapter(getContext(), mMainCardReksadana);
-                recyclerView.setAdapter(mainCardReksadanaAdapter);
-            }
-        }
-    }
-
-    private void saveDataShared(String nama, Object card) {
-        // method for saving the data in array list.
-        // creating a variable for storing data in
-        // shared preferences.
-        SharedPreferences sharedPreferences = this.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
-
-        // creating a variable for editor to
-        // store data in shared preferences.
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // creating a new variable for gson.
-        Gson gson = new Gson();
-
-        // getting data from gson and storing it in a string.
-        String json = gson.toJson(card);
-
-        // below line is to save data in shared
-        // prefs in the form of string.
-        editor.putString(nama, json);
-
-        // below line is to apply changes
-        // and save data in shared prefs.
-        editor.apply();
     }
 
     private class doItJsonReksadana extends AsyncTask<Void, Void, Void> {
@@ -308,19 +258,19 @@ public class ReksadanaFragment extends Fragment {
             super.onPostExecute(aVoid);
 
             if(mMainCardReksadana != null){
-                for(MainCardReksadana data : mMainCardReksadana){
-                    if(data.getName().toLowerCase().contains("index") || data.getName().toLowerCase().contains("etf")){
-                        data.setCategory("ETF, Index");
+                for(MainCardReksadana dataReksadana : mMainCardReksadana){
+                    if(dataReksadana.getName().toLowerCase().contains("index") || dataReksadana.getName().toLowerCase().contains("etf")){
+                        dataReksadana.setCategory("ETF, Index");
                     }
-                    else if(data.getName().toLowerCase().contains("syariah")){
-                        data.setCategory("Sharia");
+                    else if(dataReksadana.getName().toLowerCase().contains("syariah")){
+                        dataReksadana.setCategory("Sharia");
                     }
                     else{
-                        data.setCategory("Konvensional");
+                        dataReksadana.setCategory("Konvensional");
                     }
                 }
 
-                saveDataShared("maincardreksadana", mMainCardReksadana);
+                sharedPref.saveDataShared("maincardreksadana", mMainCardReksadana);
 
                 if(mMainCardReksadana.size() > 0){
                     mainCardReksadanaAdapter = new MainCardReksadanaAdapter(getContext(), mMainCardReksadana);

@@ -2,6 +2,8 @@ package com.alvarenstudio.infosaham.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +77,7 @@ public class MainCardReksadanaAdapter extends RecyclerView.Adapter<MainCardReksa
     public void onBindViewHolder(@NonNull @NotNull viewHolder holder, int position) {
         MainCardReksadana mainCardReksadana = mMainCardReksadanas.get(position);
 
-        if(position == 0) {
+        if(position == 0 && loadPreferencesInt("show_ads") == 1) {
             holder.nativeAdView.setVideoOptions(new VideoOptions.Builder()
                     .setStartMuted(true)
                     .build());
@@ -150,5 +152,13 @@ public class MainCardReksadanaAdapter extends RecyclerView.Adapter<MainCardReksa
     public String currency2Format(Double amount) {
         DecimalFormat formatter = new DecimalFormat("###,###,##0.0000");
         return formatter.format(amount).replace(".", "x").replace(",", ".").replace("x", ",");
+    }
+
+    private int loadPreferencesInt(String key) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(mContext.getApplicationContext());
+        int value = sharedPreferences.getInt(key, 0);
+
+        return value;
     }
 }

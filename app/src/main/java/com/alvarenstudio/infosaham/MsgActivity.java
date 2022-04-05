@@ -65,7 +65,6 @@ public class MsgActivity extends Activity {
     private List<Chat> mChat;
 
     private RecyclerView recyclerView;
-    private ImageView img_chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +80,6 @@ public class MsgActivity extends Activity {
         recyclerView = findViewById(R.id.recycler_view);
         relativeLayoutBottom = findViewById(R.id.bottom);
 
-        img_chat = findViewById(R.id.img_chat);
         fBaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         recyclerView.setHasFixedSize(true);
@@ -130,10 +128,9 @@ public class MsgActivity extends Activity {
         });
 
         readMsg(0);
-        getChatSize();
         showUserOnline();
 
-        sender = String.valueOf(loadPreferences("nama"));
+        sender = String.valueOf(loadPreferencesString("nama"));
 
         edittextnama = new EditText(getApplicationContext());
         edittextnama.setText(sender);
@@ -213,6 +210,13 @@ public class MsgActivity extends Activity {
             hashMap.put("timestamp", System.currentTimeMillis());
         }
 
+        if(loadPreferencesString("is_admin").equals("yes")) {
+            hashMap.put("is_admin", 1);
+        }
+        else {
+            hashMap.put("is_admin", 0);
+        }
+
         reference.child("chats").push().setValue(hashMap);
     }
 
@@ -249,23 +253,6 @@ public class MsgActivity extends Activity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-    }
-
-    public void getChatSize(){
-        reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                long chatSize = 0;
-                chatSize = dataSnapshot.getChildrenCount();
-
-                savePreferences2("chatReadSize", chatSize);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
@@ -312,7 +299,7 @@ public class MsgActivity extends Activity {
             });
             alert.show();
         }
-        else if(loadPreferences("is_admin").equals("yes")) {
+        else if(loadPreferencesString("is_admin").equals("yes")) {
             AlertDialog.Builder alert = new AlertDialog.Builder(MsgActivity.this);
             alert.setTitle("Info Saham");
             alert.setMessage("Apakah admin yakin ingin menghapus pesan ini?");
@@ -356,20 +343,12 @@ public class MsgActivity extends Activity {
         }
     }
 
-    private String loadPreferences(String key) {
+    private String loadPreferencesString(String key) {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
         String value = sharedPreferences.getString(key, "");
 
         return value;
-    }
-
-    private void savePreferences2(String key, Long value) {
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(key, value);
-        editor.commit();
     }
 
     public boolean onOptionsItemSelected(MenuItem item){

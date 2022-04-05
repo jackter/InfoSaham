@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddCatatSahamActivity"
+    android:padding="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipe Transaksi"
+            android:textSize="6pt"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/spinType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/type_list"
+            android:padding="15dp">
+        </Spinner>
+
+        <TextView
+            android:id="@+id/tvEmiten"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emiten"
+            android:textSize="6pt"
+            android:textStyle="bold"/>
+
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            android:id="@+id/spinEmiten"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/tvJml"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jumlah"
+            android:textSize="6pt"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/etJml"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_baseline_beenhere_24"
+            android:hint="Masukkan Jumlah Lembar"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/tvHarga"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Harga"
+            android:textSize="6pt"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etHarga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:digits="0123456789"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_baseline_monetization_on_24"
+            android:hint="Masukkan Harga"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/tvFee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fee"
+            android:textSize="6pt"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etFee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:digits="0123456789"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_baseline_monetization_on_24"
+            android:hint="Masukkan Fee"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:textSize="6pt"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/etTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:digits="0123456789"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_baseline_monetization_on_24"
+            android:enabled="false"
+            android:hint="Total"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tanggal Transaksi"
+            android:textSize="6pt"
+            android:textStyle="bold"/>
+
+        <com.msa.dateedittext.DateEditText
+            android:id="@+id/etTglTrx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_baseline_date_range_24"
+            android:layout_marginBottom="10dp"
+            android:drawablePadding="10dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/btnSimpan"
+            android:background="@color/accent"
+            android:layout_marginBottom="10dp"
+            android:textColor="#fff"/>
+    </LinearLayout>
+</ScrollView>
