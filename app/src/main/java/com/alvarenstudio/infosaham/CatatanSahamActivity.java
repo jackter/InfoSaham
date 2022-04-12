@@ -125,7 +125,6 @@ public class CatatanSahamActivity extends AppCompatActivity {
                         catatanListFirestore();
                         refreshLayout.setRefreshing(false);
                         searchView.setQuery("", false);
-                        searchView.setIconified(true);
                         searchView.clearFocus();
                     }
                 }, 1000);

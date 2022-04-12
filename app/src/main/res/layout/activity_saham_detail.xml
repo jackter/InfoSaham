@@ -9,7 +9,6 @@
     tools:context=".SahamDetailActivity">
 
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -168,152 +167,301 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <LinearLayout
-                android:id="@+id/linLayLiveChart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Data Grafik Hari ini"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"/>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardLiveChart"
+                android:orientation="vertical">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    app:cardCornerRadius="5dp">
-                    <ImageButton
-                        android:id="@+id/imgBtnRefresh"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:visibility="gone"
-                        android:background="@drawable/ic_baseline_refresh_24"/>
-                    <ProgressBar
-                        android:id="@+id/ivLoadingLive"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/chartLive"
+                    android:orientation="vertical">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"/>
-                </androidx.cardview.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_baseline_list_alt_24"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="8pt"
+                            android:text="Grafik Saham Hari Ini"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:id="@+id/btnArrowChartLive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/ic_baseline_keyboard_arrow_down_24"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@android:color/darker_gray"/>
+                </LinearLayout>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/linLayLiveChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp">
+                        <TextView
+                            android:id="@+id/tvCLHi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:background="@drawable/shape1c"
+                            android:visibility="invisible"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:padding="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvCLLo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:background="@drawable/shape3c"
+                            android:visibility="invisible"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:padding="10dp"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:id="@+id/btnRefresh"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_baseline_refresh_24"
+                            android:foreground="?android:attr/selectableItemBackground"/>
+                    </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardLiveChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="5dp">
+                        <ProgressBar
+                            android:id="@+id/ivLoadingLive"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/chartLive"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"/>
+                    </androidx.cardview.widget.CardView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
             </LinearLayout>
-            <Button
-                android:id="@+id/btnShowLiveChart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SHOW LIVE CHART"
-                android:backgroundTint="@color/accent"
-                android:layout_margin="10dp"
-                android:textColor="#fff"/>
+
             <LinearLayout
-                android:id="@+id/linLayChart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-                <RadioGroup
+                android:orientation="vertical">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-                    <RadioButton
-                        android:id="@+id/radBat1Year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/radio_selector"
-                        android:textColor="@drawable/radio_text_color"
-                        android:elevation="4dp"
-                        android:text="1 Year"
-                        android:padding="10dp"
-                        android:layout_margin="8dp"/>
-
-                    <RadioButton
-                        android:id="@+id/radBat3Year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/radio_selector"
-                        android:textColor="@drawable/radio_text_color"
-                        android:elevation="4dp"
-                        android:text="3 Year"
-                        android:padding="10dp"
-                        android:layout_margin="8dp"/>
-
-                    <RadioButton
-                        android:id="@+id/radBat5Year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/radio_selector"
-                        android:textColor="@drawable/radio_text_color"
-                        android:elevation="4dp"
-                        android:text="5 Year"
-                        android:padding="10dp"
-                        android:layout_margin="8dp"/>
-                </RadioGroup>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    app:cardCornerRadius="5dp">
-                    <ProgressBar
-                        android:id="@+id/ivLoading"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/chart"
+                    android:orientation="vertical">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"/>
-                </androidx.cardview.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_baseline_list_alt_24"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="8pt"
+                            android:text="Grafik Saham"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:id="@+id/btnArrowChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/ic_baseline_keyboard_arrow_down_24"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@android:color/darker_gray"/>
+                </LinearLayout>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/linLayChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radBat1Month"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@android:color/transparent"
+                            android:background="@drawable/radio_selector"
+                            android:textColor="@drawable/radio_text_color"
+                            android:elevation="4dp"
+                            android:text="1 Month"
+                            android:padding="10dp"
+                            android:layout_margin="8dp"/>
+
+                        <RadioButton
+                            android:id="@+id/radBat1Year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@android:color/transparent"
+                            android:background="@drawable/radio_selector"
+                            android:textColor="@drawable/radio_text_color"
+                            android:elevation="4dp"
+                            android:text="1 Year"
+                            android:padding="10dp"
+                            android:layout_margin="8dp"/>
+
+                        <RadioButton
+                            android:id="@+id/radBat3Year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@android:color/transparent"
+                            android:background="@drawable/radio_selector"
+                            android:textColor="@drawable/radio_text_color"
+                            android:elevation="4dp"
+                            android:text="3 Year"
+                            android:padding="10dp"
+                            android:layout_margin="8dp"/>
+
+                        <RadioButton
+                            android:id="@+id/radBat5Year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@android:color/transparent"
+                            android:background="@drawable/radio_selector"
+                            android:textColor="@drawable/radio_text_color"
+                            android:elevation="4dp"
+                            android:text="5 Year"
+                            android:padding="10dp"
+                            android:layout_margin="8dp"/>
+                    </RadioGroup>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp">
+                        <TextView
+                            android:id="@+id/tvCHi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:background="@drawable/shape1c"
+                            android:visibility="gone"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:padding="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvCLo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:background="@drawable/shape3c"
+                            android:visibility="gone"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:padding="10dp"/>
+                    </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="5dp">
+                        <ProgressBar
+                            android:id="@+id/ivLoading"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"/>
+                    </androidx.cardview.widget.CardView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
             </LinearLayout>
-            <Button
-                android:id="@+id/btnShowChart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SHOW CHART"
-                android:backgroundTint="@color/accent"
-                android:layout_margin="10dp"
-                android:textColor="#fff"/>
-            <WebView
-                android:id="@+id/webView"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="WebViewLayout" />
 
             <LinearLayout
                 android:id="@+id/linLayDiv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:orientation="vertical">
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp">
+                    android:layout_marginLeft="8dp">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/ic_baseline_list_alt_24"/>
 
                     <TextView
-                        android:id="@+id/divTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="8pt"
-                        android:text="DIVIDEND YIELD"/>
+                        android:text="Dividen Yield"/>
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/btnArrowDiv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/ic_baseline_keyboard_arrow_up_24"/>
                 </LinearLayout>
 
                 <View
@@ -324,34 +472,30 @@
                     android:background="@android:color/darker_gray"/>
             </LinearLayout>
 
-<!--            <TableLayout-->
-<!--                android:id="@+id/tableLayoutDividen"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:layout_width="fill_parent"-->
-<!--                android:layout_height="fill_parent">-->
-<!--            </TableLayout>-->
-
             <ScrollView
-                android:id="@+id/layout"
+                android:id="@+id/scrollViewDividend"
                 android:layout_margin="10dp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:scrollbars="horizontal|vertical"
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="5dip"
                 android:scrollbarStyle="outsideInset"
                 android:fillViewport="true">
-                <HorizontalScrollView
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scrollbars="horizontal|vertical"
-                    android:layout_width="wrap_content">
+                    app:cardCornerRadius="4dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    android:padding="5dp">
                     <TableLayout
                         android:id="@+id/tableLayoutDividen"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
                     </TableLayout>
-                </HorizontalScrollView>
+                </androidx.cardview.widget.CardView>
             </ScrollView>
         </LinearLayout>
     </ScrollView>

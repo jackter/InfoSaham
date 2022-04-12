@@ -43,52 +43,82 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <RadioButton
-            android:id="@+id/radBatCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:color/transparent"
-            android:background="@drawable/radio_selector"
-            android:textColor="@drawable/radio_text_color"
-            android:elevation="4dp"
-            android:text="Code"
-            android:padding="10dp"
-            android:layout_margin="8dp"/>
-        <RadioButton
-            android:id="@+id/radBat1Day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:color/transparent"
-            android:background="@drawable/radio_selector"
-            android:textColor="@drawable/radio_text_color"
-            android:elevation="4dp"
-            android:text="1 Day"
-            android:padding="10dp"
-            android:layout_margin="8dp"/>
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/radBatCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/radio_text_color"
+                android:elevation="4dp"
+                android:text="Code"
+                android:padding="10dp"
+                android:layout_margin="8dp"/>
+            <RadioButton
+                android:id="@+id/radBat1Day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/radio_text_color"
+                android:elevation="4dp"
+                android:text="1 Day"
+                android:padding="10dp"
+                android:layout_margin="8dp"/>
 
-        <RadioButton
-            android:id="@+id/radBat1Month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:color/transparent"
-            android:background="@drawable/radio_selector"
-            android:textColor="@drawable/radio_text_color"
-            android:elevation="4dp"
-            android:text="1 Month"
-            android:padding="10dp"
-            android:layout_margin="8dp"/>
+            <RadioButton
+                android:id="@+id/radBat1Month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/radio_text_color"
+                android:elevation="4dp"
+                android:text="1 Month"
+                android:padding="10dp"
+                android:layout_margin="8dp"/>
 
-        <RadioButton
-            android:id="@+id/radBat1Year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:color/transparent"
-            android:background="@drawable/radio_selector"
-            android:textColor="@drawable/radio_text_color"
-            android:elevation="4dp"
-            android:text="1 Year"
-            android:padding="10dp"
-            android:layout_margin="8dp"/>
+            <RadioButton
+                android:id="@+id/radBat1Year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/radio_text_color"
+                android:elevation="4dp"
+                android:text="1 Year"
+                android:padding="10dp"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/radBatOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/radio_text_color"
+                android:elevation="4dp"
+                android:text="Open"
+                android:padding="10dp"
+                android:layout_margin="8dp"/>
+            <RadioButton
+                android:id="@+id/radBatFreq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/radio_text_color"
+                android:elevation="4dp"
+                android:text="Freq"
+                android:padding="10dp"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
     </RadioGroup>
 </LinearLayout>

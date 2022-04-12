@@ -122,7 +122,12 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                 }
                 else if (item.getItemId() == R.id.chat) {
-                    startActivity(new Intent(MainActivity.this, MsgActivity.class));
+                    if(fBaseUser != null) {
+                        startActivity(new Intent(MainActivity.this, MsgActivity.class));
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Silahkan login terlebih dahulu.", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else if (item.getItemId() == R.id.signout) {
                     FirebaseAuth.getInstance().signOut();
@@ -230,6 +235,9 @@ public class MainActivity extends AppCompatActivity {
 
                     if(user.getIs_admin() != null) {
                         savePreferencesString("is_admin", "yes");
+                    }
+                    else{
+                        savePreferencesString("is_admin", "no");
                     }
                 }
 

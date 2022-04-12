@@ -41,7 +41,7 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
     }
 
     public class viewHolder extends RecyclerView.ViewHolder{
-        public TextView tvName, tvSectore, tvSubIndustry, tvLast, tvPrev, tvOpen, tvHigh, tvLow, tvPER, tvPBV, tvVol, tvVal, tv1Day, tv1Month, tvYtd, tv1Year, tvCap;
+        public TextView tvName, tvSectore, tvSubIndustry, tvLast, tvPrev, tvOpen, tvFreq, tvHigh, tvLow, tvPER, tvPBV, tvVol, tvVal, tv1Day, tv1Month, tvYtd, tv1Year, tvCap;
         public CardView cardSaham, cardAdsGoogle;
         public LinearLayout linLayoutMC;
         public NativeExpressAdView nativeAdView;
@@ -60,6 +60,7 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
             tvLast = itemView.findViewById(R.id.tvLast);
             tvPrev = itemView.findViewById(R.id.tvPrev);
             tvOpen = itemView.findViewById(R.id.tvOpen);
+            tvFreq = itemView.findViewById(R.id.tvFreq);
             tvHigh = itemView.findViewById(R.id.tvHigh);
             tvLow = itemView.findViewById(R.id.tvLow);
             tvPER = itemView.findViewById(R.id.tvPER);
@@ -124,6 +125,7 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
         holder.tvLast.setText(currencyFormat(mainCardSaham.getLast()));
         holder.tvPrev.setText(currencyFormat(mainCardSaham.getPrev()));
         holder.tvOpen.setText(currencyFormat(mainCardSaham.getOpen()));
+        holder.tvFreq.setText(currencyFormat(mainCardSaham.getFreq()));
         holder.tvHigh.setText(currencyFormat(mainCardSaham.getHigh()));
         holder.tvLow.setText(currencyFormat(mainCardSaham.getLow()));
         holder.tvPER.setText(decimalFormat(mainCardSaham.getPer()));

@@ -107,8 +107,17 @@
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
                         android:textColor="#5abd96"
-                        android:background="@drawable/shape1b"
+                        android:background="@drawable/shape1"
                         android:text="Open"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="8pt"
+                        android:textColor="#5abd96"
+                        android:background="@drawable/shape1b"
+                        android:text="Freq"/>
                 </TableRow>
 
                 <TableRow
@@ -137,6 +146,16 @@
                         android:text="9.775,00"/>
                     <TextView
                         android:id="@+id/tvOpen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="8pt"
+                        android:textColor="#bca15c"
+                        android:background="@drawable/shape2"
+                        android:gravity="right"
+                        android:text="9.775,00"/>
+                    <TextView
+                        android:id="@+id/tvFreq"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
@@ -183,7 +202,7 @@
                         android:gravity="center_horizontal"
                         android:textSize="8pt"
                         android:textColor="#5abd96"
-                        android:background="@drawable/shape1b"
+                        android:background="@drawable/shape1"
                         android:text="PBV"/>
                 </TableRow>
 

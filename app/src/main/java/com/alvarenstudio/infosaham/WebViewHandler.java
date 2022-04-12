@@ -1,48 +1,22 @@
 package com.alvarenstudio.infosaham;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
-
-import com.alvarenstudio.infosaham.model.Emiten;
 import com.alvarenstudio.infosaham.model.EmitenClosingPrice;
-import com.alvarenstudio.infosaham.model.MChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.net.CookieManager;
-import java.net.HttpCookie;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class WebViewHandler {
     private static final String TAG = WebViewHandler.class.getSimpleName();
@@ -83,28 +57,33 @@ public class WebViewHandler {
 
                         JSONObject jsonObject = new JSONObject(cmsg.message());
 
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US);
+                        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+                        Date parsedDate = dateFormat.parse(jsonObject.getString("DTCreate").split("T")[0] + " " + jsonObject.getString("DTCreate").split("T")[1]);
+
                         if(emitenClosingPrices.size() > 0) {
                             boolean find = false;
                             for(EmitenClosingPrice data: emitenClosingPrices) {
-                                if(data.getEmiten().equals(emiten) && jsonObject.getLong("ClosingPrice") > 0) {
+                                if(data.getEmiten().equals(emiten) && jsonObject.getLong("ClosingPrice") > 0 && parsedDate.getTime() > data.getDate()) {
                                     find = true;
                                     data.setClosingPrice(jsonObject.getLong("ClosingPrice"));
+                                    data.setDate(parsedDate.getTime());
                                 }
                             }
 
                             if(!find && jsonObject.getLong("ClosingPrice") > 0) {
-                                emitenClosingPrices.add(new EmitenClosingPrice(emiten, jsonObject.getLong("ClosingPrice"), 0L));
+                                emitenClosingPrices.add(new EmitenClosingPrice(emiten, jsonObject.getLong("ClosingPrice"), parsedDate.getTime()));
                             }
                         }
                         else {
                             if(jsonObject.getLong("ClosingPrice") > 0) {
-                                emitenClosingPrices.add(new EmitenClosingPrice(emiten, jsonObject.getLong("ClosingPrice"), 0L));
+                                emitenClosingPrices.add(new EmitenClosingPrice(emiten, jsonObject.getLong("ClosingPrice"), parsedDate.getTime()));
                             }
                         }
 
                         sharedPref.saveDataShared("emitenclosingprices", emitenClosingPrices);
 
-                    } catch (JSONException e) {
+                    } catch (JSONException | ParseException e) {
                         Log.e(TAG, "Json parsing error: " + e.getMessage());
                     }
                 } else {

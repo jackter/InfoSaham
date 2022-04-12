@@ -207,6 +207,13 @@ public class SahamFragment extends Fragment {
                                 mainCardSaham.setLow(0);
                             }
 
+                            if(!saham.isNull("Frequency")){
+                                mainCardSaham.setFreq(saham.getDouble("Frequency"));
+                            }
+                            else{
+                                mainCardSaham.setFreq(0);
+                            }
+
                             if(!saham.isNull("Per")){
                                 mainCardSaham.setPer(saham.getDouble("Per"));
                             }
@@ -379,6 +386,8 @@ public class SahamFragment extends Fragment {
         RadioButton rb1Day = dialogView.findViewById(R.id.radBat1Day);
         RadioButton rb1Month = dialogView.findViewById(R.id.radBat1Month);
         RadioButton rb1Year = dialogView.findViewById(R.id.radBat1Year);
+        RadioButton rbOpen = dialogView.findViewById(R.id.radBatOpen);
+        RadioButton rbFreq = dialogView.findViewById(R.id.radBatFreq);
 
         if(sortType == 0) {
             rbAsc.setChecked(true);
@@ -398,8 +407,14 @@ public class SahamFragment extends Fragment {
         else if(sort == 2) {
             rb1Month.setChecked(true);
         }
-        else {
+        else if(sort == 3){
             rb1Year.setChecked(true);
+        }
+        else if(sort == 4){
+            rbOpen.setChecked(true);
+        }
+        else if(sort == 5){
+            rbFreq.setChecked(true);
         }
 
         rbAsc.setOnClickListener(new View.OnClickListener() {
@@ -422,7 +437,13 @@ public class SahamFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 sort = 0;
+
                 rbCode.setChecked(true);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
             }
         });
 
@@ -430,7 +451,13 @@ public class SahamFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 sort = 1;
+
+                rbCode.setChecked(false);
                 rb1Day.setChecked(true);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
             }
         });
 
@@ -438,7 +465,13 @@ public class SahamFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 sort = 2;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
                 rb1Month.setChecked(true);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
             }
         });
 
@@ -446,7 +479,41 @@ public class SahamFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 sort = 3;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
                 rb1Year.setChecked(true);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
+            }
+        });
+
+        rbOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 4;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(true);
+                rbFreq.setChecked(false);
+            }
+        });
+
+        rbFreq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 5;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(true);
             }
         });
 
@@ -482,7 +549,15 @@ public class SahamFragment extends Fragment {
         Collections.sort(mMainCardSaham, new Comparator<MainCardSaham>() {
             @Override
             public int compare(MainCardSaham t1, MainCardSaham t2) {
-                if(sort == 1) {
+                if (sort == 0) {
+                    if(sortType == 0) {
+                        return t1.getCode().compareTo(t2.getCode());
+                    }
+                    else {
+                        return t2.getCode().compareTo(t1.getCode());
+                    }
+                }
+                else if(sort == 1) {
                     if(sortType == 0) {
                         return Double.compare(t1.getOneday(), t2.getOneday());
                     }
@@ -506,12 +581,20 @@ public class SahamFragment extends Fragment {
                         return Double.compare(t2.getOneyear(), t1.getOneyear());
                     }
                 }
-                else {
+                else if(sort == 4) {
                     if(sortType == 0) {
-                        return t1.getCode().compareTo(t2.getCode());
+                        return Double.compare(t1.getOpen(), t2.getOpen());
                     }
                     else {
-                        return t2.getCode().compareTo(t1.getCode());
+                        return Double.compare(t2.getOpen(), t1.getOpen());
+                    }
+                }
+                else {
+                    if(sortType == 0) {
+                        return Double.compare(t1.getFreq(), t2.getFreq());
+                    }
+                    else {
+                        return Double.compare(t2.getFreq(), t1.getFreq());
                     }
                 }
             }

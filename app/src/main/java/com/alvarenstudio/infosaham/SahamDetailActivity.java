@@ -1,6 +1,8 @@
 package com.alvarenstudio.infosaham;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +23,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -59,7 +62,6 @@ import java.util.TimeZone;
 
 public class SahamDetailActivity extends AppCompatActivity {
     private String TAG = SahamDetailActivity.class.getSimpleName();
-    private ScrollView scrollView;
     private int id;
     private String code;
     private boolean fav;
@@ -70,25 +72,28 @@ public class SahamDetailActivity extends AppCompatActivity {
     private ArrayList<String> y;
     private ProgressBar chartProgBar, chartProgBarLive;
     private TableLayout tableLayout;
-    private LinearLayout linLayChart, linLayChartLive, linLayDiv;
-    private Button btnShowChart, btnShowLiveChart;
-    private WebView webView;
+    private LinearLayoutCompat linLayChart, linLayChartLive;
+    private LinearLayout linLayDiv;
+    private ImageButton btnArrowDiv, btnArrowChartLive, btnArrowChart, btnRefresh;
+    private boolean arrowDiv = true;
+    private WebView webView1, webView2;
     private boolean flipChart = false, flipChartLive = false;
-    private TextView tvName, tvSectore, tvSubIndustry, tvVol, tvVal, tvCap, tvDivTitle;
+    private TextView tvName, tvSectore, tvSubIndustry, tvVol, tvVal, tvCap, tvCLHi, tvCLLo, tvCHi, tvCLo;
     private ArrayList<String> liveChartStringList = new ArrayList<>();
     private ArrayList<String> chartStringList = new ArrayList<>();
     private MainCardSaham mainCardSaham;
     private List<MainCardSaham> mMainCardSahamFav;
-    private RadioButton rb1Year, rb3Year, rb5Year;
-    private int rbChart = 1;
+    private RadioButton rb1Month, rb1Year, rb3Year, rb5Year;
+    private int rbChart = 4;
     private SharedPref sharedPref;
+    private ScrollView scrollView;
+    private long CLHi, CLLo, CHi, CLo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saham_detail);
 
-        scrollView = findViewById(R.id.scrollView);
         tvName = findViewById(R.id.tvName);
         tvSectore = findViewById(R.id.tvSectore);
         tvSubIndustry = findViewById(R.id.tvSubIndustry);
@@ -103,13 +108,17 @@ public class SahamDetailActivity extends AppCompatActivity {
         linLayChart = findViewById(R.id.linLayChart);
         linLayChartLive = findViewById(R.id.linLayLiveChart);
         linLayDiv = findViewById(R.id.linLayDiv);
-        btnShowChart = findViewById(R.id.btnShowChart);
-        btnShowLiveChart = findViewById(R.id.btnShowLiveChart);
-        tvDivTitle = findViewById(R.id.divTitle);
-        webView = findViewById(R.id.webView);
-
-        Typeface type = Typeface.createFromAsset(getAssets(),"fonts/baloo.ttf");
-        tvDivTitle.setTypeface(type);
+        btnArrowDiv = findViewById(R.id.btnArrowDiv);
+        btnArrowChartLive = findViewById(R.id.btnArrowChartLive);
+        btnArrowChart = findViewById(R.id.btnArrowChart);
+        btnRefresh = findViewById(R.id.btnRefresh);
+        tvCLHi = findViewById(R.id.tvCLHi);
+        tvCLLo = findViewById(R.id.tvCLLo);
+        tvCHi = findViewById(R.id.tvCHi);
+        tvCLo = findViewById(R.id.tvCLo);
+        webView1 = new WebView(getApplicationContext());
+        webView2 = new WebView(getApplicationContext());
+        scrollView = findViewById(R.id.scrollViewDividend);
 
         Intent mIntent = getIntent();
         mainCardSaham = (MainCardSaham) mIntent.getSerializableExtra("mainCardSaham");
@@ -133,84 +142,148 @@ public class SahamDetailActivity extends AppCompatActivity {
             }
         }
 
+        btnArrowDiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(arrowDiv) {
+                    arrowDiv = false;
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowDiv.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24) );
+                    } else {
+                        btnArrowDiv.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24));
+                    }
+
+                    scrollView.setVisibility(View.GONE);
+                }
+                else{
+                    arrowDiv = true;
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowDiv.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24) );
+                    } else {
+                        btnArrowDiv.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24));
+                    }
+
+                    scrollView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         rowDividend = new ArrayList<LVDividend>();
 
         new doItDiv().execute();
 
-        this.webViewPg();
+        this.webViewPg1();
+        this.webViewPg2();
+        this.chart1Period();
         this.chart3Years();
 
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(flipChart || flipChartLive) {
-                    return true;
-                }
-                else{
-                    return false;
-                }
+            public void onClick(View v) {
+                liveChartStringList.clear();
+                webView1.loadUrl("https://idx.co.id/umbraco/Surface/Helper/GetStockChart?indexCode=" + code);
             }
         });
 
-        btnShowLiveChart.setOnClickListener(new View.OnClickListener() {
+        btnArrowChartLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!flipChartLive) {
                     flipChartLive = true;
+                    if(chartLiveList == null) {
+                        liveChartStringList.clear();
+                        webView1.loadUrl("https://idx.co.id/umbraco/Surface/Helper/GetStockChart?indexCode=" + code);
+                    }
 
-                    chart1Period();
-                    webView.loadUrl("https://idx.co.id/umbraco/Surface/Helper/GetStockChart?indexCode=" + code);
-
-                    btnShowLiveChart.setText("HIDE LIVE CHART");
                     linLayChartLive.setVisibility(View.VISIBLE);
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowChartLive.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24) );
+                    } else {
+                        btnArrowChartLive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24));
+                    }
                 }
                 else{
-                    btnShowLiveChart.setText("SHOW LIVE CHART");
                     linLayChartLive.setVisibility(View.GONE);
                     flipChartLive = false;
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowChartLive.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24) );
+                    } else {
+                        btnArrowChartLive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24));
+                    }
                 }
             }
         });
 
-        btnShowChart.setOnClickListener(new View.OnClickListener() {
+        btnArrowChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!flipChart) {
                     flipChart = true;
                     if(chartList == null) {
                         if(rbChart == 1) {
-                            webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=250");
+                            webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=250");
                         }
                         else if (rbChart == 2) {
-                            webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
+                            webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
+                        }
+                        else if (rbChart == 3) {
+                            webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=1250");
                         }
                         else {
-                            webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=1250");
+                            webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=21");
                         }
                     }
 
-                    btnShowChart.setText("HIDE CHART");
                     linLayChart.setVisibility(View.VISIBLE);
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowChart.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24) );
+                    } else {
+                        btnArrowChart.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24));
+                    }
                 }
                 else{
-                    btnShowChart.setText("SHOW CHART");
                     linLayChart.setVisibility(View.GONE);
                     flipChart = false;
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowChart.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24) );
+                    } else {
+                        btnArrowChart.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24));
+                    }
                 }
             }
         });
 
+        rb1Month = findViewById(R.id.radBat1Month);
         rb1Year = findViewById(R.id.radBat1Year);
         rb3Year = findViewById(R.id.radBat3Year);
         rb5Year = findViewById(R.id.radBat5Year);
 
-        rb1Year.setChecked(true);
+        rb1Month.setChecked(true);
+        rb1Month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rbChart = 4;
+                rb1Month.setChecked(true);
+                chartList = null;
+                chartStringList.clear();
+                webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=21");
+            }
+        });
+
         rb1Year.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rbChart = 1;
                 rb1Year.setChecked(true);
-                webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=250");
+                chartList = null;
+                chartStringList.clear();
+                webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=250");
             }
         });
 
@@ -219,7 +292,9 @@ public class SahamDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 rbChart = 2;
                 rb3Year.setChecked(true);
-                webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
+                chartList = null;
+                chartStringList.clear();
+                webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=750");
             }
         });
 
@@ -228,7 +303,9 @@ public class SahamDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 rbChart = 3;
                 rb5Year.setChecked(true);
-                webView.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=1250");
+                chartList = null;
+                chartStringList.clear();
+                webView2.loadUrl("https://idx.co.id/umbraco/Surface/ListedCompany/GetTradingInfoSS?code=" + code + "&length=1250");
             }
         });
 
@@ -240,15 +317,12 @@ public class SahamDetailActivity extends AppCompatActivity {
         return formatter.format(amount).replace(".", "x").replace(",", ".").replace("x", ",");
     }
 
-    private void webViewPg() {
+    private void webViewPg1() {
         WebViewClient webClient = new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if(flipChart){
-                    chartProgBar.setVisibility(View.VISIBLE);
-                }
-                else if(flipChartLive){
+                if(flipChartLive){
                     chartProgBarLive.setVisibility(View.VISIBLE);
                 }
             }
@@ -265,9 +339,121 @@ public class SahamDetailActivity extends AppCompatActivity {
         };
 
 
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(webClient);
-        webView.setWebChromeClient(new WebChromeClient() {
+        webView1.getSettings().setJavaScriptEnabled(true);
+        webView1.setWebViewClient(webClient);
+        webView1.setWebChromeClient(new WebChromeClient() {
+            public boolean onConsoleMessage(ConsoleMessage cmsg)
+            {
+                if (cmsg.message() != null) {
+                    try {
+                        if(flipChartLive) {
+                            JSONObject jsonObject = new JSONObject(cmsg.message());
+                            JSONArray listChart = jsonObject.getJSONArray("ChartData");
+
+                            chartLiveList = new ArrayList<>();
+                            List<String> DateList = new ArrayList<String>();
+
+                            for(int i = 0; i < listChart.length(); i++){
+                                JSONObject jsonchart = listChart.getJSONObject(i);
+
+                                if(!DateList.contains(jsonchart.getLong("Date")) && jsonchart.getLong("Close") != 0){
+                                    chartLiveList.add(new MChart(jsonchart.getLong("Close"), String.valueOf(jsonchart.getLong("Date"))));
+                                    DateList.add(String.valueOf(jsonchart.getLong("Date")));
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    }
+                } else {
+                    Log.e(TAG, "Gagal mengambil data json dari server.");
+                }
+
+                if(chartLiveList != null && flipChartLive){
+                    if(chartLiveList.size() > 0){
+                        chartProgBarLive.setVisibility(View.INVISIBLE);
+
+                        Collections.sort(chartLiveList, new Comparator<MChart>() {
+                            @Override
+                            public int compare(MChart t1, MChart t2) {
+                                return t1.getDate().compareTo(t2.getDate());
+                            }
+                        });
+
+                        int i = 0;
+                        x = new ArrayList<Entry>();
+                        y = new ArrayList<String>();
+
+                        CLHi = 0;
+                        CLLo = 100000;
+
+                        for (MChart chart : chartLiveList) {
+                            liveChartStringList.add(timestampToDT(Long.valueOf(chart.getDate())));
+                            x.add(new Entry(chart.getPrice(), i));
+                            y.add(timestampToDT(Long.valueOf(chart.getDate())));
+
+                            if(chart.getPrice() > CLHi) {
+                                CLHi = chart.getPrice();
+                            }
+
+                            if(chart.getPrice() < CLLo) {
+                                CLLo = chart.getPrice();
+                            }
+
+                            i++;
+                        }
+
+                        tvCLHi.setText("High - " + String.valueOf(currencyFormat((double) CLHi)));
+                        tvCLLo.setText("Low - " + String.valueOf(currencyFormat((double) CLLo)));
+                        tvCLHi.setVisibility(View.VISIBLE);
+                        tvCLLo.setVisibility(View.VISIBLE);
+
+                        if(i > 1){
+                            LineDataSet set1 = new LineDataSet(x, "");
+                            set1.setDrawCircleHole(false);
+                            set1.setDrawCircles(false);
+                            set1.setLineWidth(1.5f);
+                            set1.setCircleRadius(4f);
+                            set1.setValueTextColor(Color.TRANSPARENT);
+                            set1.setDrawFilled(true);
+                            LineData data = new LineData(y, set1);
+                            mLineChartLive.clear();
+                            mLineChartLive.setData(data);
+                            mLineChartLive.invalidate();
+                        }
+                    }
+                }
+
+                return true;
+            }
+        });
+    }
+
+    private void webViewPg2() {
+        WebViewClient webClient = new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                if(flipChart){
+                    chartProgBar.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                view.loadUrl("javascript:console.log(document.body.getElementsByTagName('pre')[0].innerHTML);");
+            }
+        };
+
+
+        webView2.getSettings().setJavaScriptEnabled(true);
+        webView2.setWebViewClient(webClient);
+        webView2.setWebChromeClient(new WebChromeClient() {
             public boolean onConsoleMessage(ConsoleMessage cmsg)
             {
                 if (cmsg.message() != null) {
@@ -285,22 +471,6 @@ public class SahamDetailActivity extends AppCompatActivity {
                                 if(!DateList.contains(jsonchart.getString("Date"))){
                                     chartList.add(new MChart(jsonchart.getLong("Close"), jsonchart.getString("Date")));
                                     DateList.add(jsonchart.getString("Date"));
-                                }
-                            }
-                        }
-                        else if(flipChartLive) {
-                            JSONObject jsonObject = new JSONObject(cmsg.message());
-                            JSONArray listChart = jsonObject.getJSONArray("ChartData");
-
-                            chartLiveList = new ArrayList<>();
-                            List<String> DateList = new ArrayList<String>();
-
-                            for(int i = 0; i < listChart.length(); i++){
-                                JSONObject jsonchart = listChart.getJSONObject(i);
-
-                                if(!DateList.contains(jsonchart.getLong("Date")) && jsonchart.getLong("Close") != 0){
-                                    chartLiveList.add(new MChart(jsonchart.getLong("Close"), String.valueOf(jsonchart.getLong("Date"))));
-                                    DateList.add(String.valueOf(jsonchart.getLong("Date")));
                                 }
                             }
                         }
@@ -326,12 +496,29 @@ public class SahamDetailActivity extends AppCompatActivity {
                         x = new ArrayList<Entry>();
                         y = new ArrayList<String>();
 
+                        CHi = 0;
+                        CLo = 100000;
+
                         for (MChart chart : chartList) {
                             chartStringList.add(chart.getDate().split("T")[0]);
                             x.add(new Entry(chart.getPrice(), i));
                             y.add(chart.getDate().split("T")[0]);
+
+                            if(chart.getPrice() > CHi) {
+                                CHi = chart.getPrice();
+                            }
+
+                            if(chart.getPrice() < CLo) {
+                                CLo = chart.getPrice();
+                            }
+
                             i++;
                         }
+
+                        tvCHi.setText("High - " + String.valueOf(currencyFormat((double) CHi)));
+                        tvCLo.setText("Low - " + String.valueOf(currencyFormat((double) CLo)));
+                        tvCHi.setVisibility(View.VISIBLE);
+                        tvCLo.setVisibility(View.VISIBLE);
 
                         if(i > 1){
                             LineDataSet set1 = new LineDataSet(x, "");
@@ -345,44 +532,6 @@ public class SahamDetailActivity extends AppCompatActivity {
                             mLineChart.clear();
                             mLineChart.setData(data);
                             mLineChart.invalidate();
-                        }
-                    }
-                }
-
-                if(chartLiveList != null && flipChartLive){
-                    if(chartLiveList.size() > 0){
-                        chartProgBarLive.setVisibility(View.INVISIBLE);
-
-                        Collections.sort(chartLiveList, new Comparator<MChart>() {
-                            @Override
-                            public int compare(MChart t1, MChart t2) {
-                                return t1.getDate().compareTo(t2.getDate());
-                            }
-                        });
-
-                        int i = 0;
-                        x = new ArrayList<Entry>();
-                        y = new ArrayList<String>();
-
-                        for (MChart chart : chartLiveList) {
-                            liveChartStringList.add(timestampToDT(Long.valueOf(chart.getDate())));
-                            x.add(new Entry(chart.getPrice(), i));
-                            y.add(timestampToDT(Long.valueOf(chart.getDate())));
-                            i++;
-                        }
-
-                        if(i > 1){
-                            LineDataSet set1 = new LineDataSet(x, "");
-                            set1.setDrawCircleHole(false);
-                            set1.setDrawCircles(false);
-                            set1.setLineWidth(1.5f);
-                            set1.setCircleRadius(4f);
-                            set1.setValueTextColor(Color.TRANSPARENT);
-                            set1.setDrawFilled(true);
-                            LineData data = new LineData(y, set1);
-                            mLineChartLive.clear();
-                            mLineChartLive.setData(data);
-                            mLineChartLive.invalidate();
                         }
                     }
                 }
@@ -449,7 +598,6 @@ public class SahamDetailActivity extends AppCompatActivity {
                         for(int i = 0; i < listDividend.length(); i++){
                             JSONObject jsondividend = listDividend.getJSONObject(i);
                             dividend = new LVDividend(jsondividend.getString("Type"), jsondividend.getString("ProceedInstrument"), jsondividend.getString("Year"), jsondividend.getString("RecordDate"), jsondividend.getString("DistributionDate"));
-
                             rowDividend.add(dividend);
                         }
                     } catch (JSONException e) {
@@ -505,7 +653,7 @@ public class SahamDetailActivity extends AppCompatActivity {
         textViewDesc.setText("DESKRIPSI");
         textViewDesc.setTextColor(Color.WHITE);
         textViewDesc.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewDesc.setPadding(30, 30, 30, 30);
+        textViewDesc.setPadding(20, 30, 20, 30);
         textViewDesc.setTextSize(12);
         textViewDesc.setGravity(Gravity.CENTER_HORIZONTAL);
         tableRow.addView(textViewDesc);
@@ -515,7 +663,7 @@ public class SahamDetailActivity extends AppCompatActivity {
         textViewDividen.setText("DIVIDEN");
         textViewDividen.setTextColor(Color.WHITE);
         textViewDividen.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewDividen.setPadding(30, 30, 30, 30);
+        textViewDividen.setPadding(20, 30, 20, 30);
         textViewDividen.setTextSize(12);
         textViewDividen.setGravity(Gravity.CENTER_HORIZONTAL);
         tableRow.addView(textViewDividen);
@@ -525,7 +673,7 @@ public class SahamDetailActivity extends AppCompatActivity {
         textViewTahun.setText("TAHUN");
         textViewTahun.setTextColor(Color.WHITE);
         textViewTahun.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewTahun.setPadding(30, 30, 30, 30);
+        textViewTahun.setPadding(20, 30, 20, 30);
         textViewTahun.setTextSize(12);
         textViewTahun.setGravity(Gravity.CENTER_HORIZONTAL);
         tableRow.addView(textViewTahun);
@@ -535,7 +683,7 @@ public class SahamDetailActivity extends AppCompatActivity {
         textViewRecord.setText("RECORD");
         textViewRecord.setTextColor(Color.WHITE);
         textViewRecord.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewRecord.setPadding(30, 30, 30, 30);
+        textViewRecord.setPadding(20, 30, 20, 30);
         textViewRecord.setTextSize(12);
         textViewRecord.setGravity(Gravity.CENTER_HORIZONTAL);
         tableRow.addView(textViewRecord);
@@ -545,7 +693,7 @@ public class SahamDetailActivity extends AppCompatActivity {
         textViewDistribute.setText("DISTRIBUTE");
         textViewDistribute.setTextColor(Color.WHITE);
         textViewDistribute.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewDistribute.setPadding(30, 30, 30, 30);
+        textViewDistribute.setPadding(20, 30, 20, 30);
         textViewDistribute.setTextSize(12);
         textViewDistribute.setGravity(Gravity.CENTER_HORIZONTAL);
         tableRow.addView(textViewDistribute);

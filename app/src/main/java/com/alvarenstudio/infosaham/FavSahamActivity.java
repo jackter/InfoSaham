@@ -131,6 +131,8 @@ public class FavSahamActivity extends AppCompatActivity {
         RadioButton rb1Day = dialogView.findViewById(R.id.radBat1Day);
         RadioButton rb1Month = dialogView.findViewById(R.id.radBat1Month);
         RadioButton rb1Year = dialogView.findViewById(R.id.radBat1Year);
+        RadioButton rbOpen = dialogView.findViewById(R.id.radBatOpen);
+        RadioButton rbFreq = dialogView.findViewById(R.id.radBatFreq);
 
         if(sortType == 0) {
             rbAsc.setChecked(true);
@@ -150,8 +152,14 @@ public class FavSahamActivity extends AppCompatActivity {
         else if(sort == 2) {
             rb1Month.setChecked(true);
         }
-        else {
+        else if(sort == 3){
             rb1Year.setChecked(true);
+        }
+        else if(sort == 4){
+            rbOpen.setChecked(true);
+        }
+        else if(sort == 5){
+            rbFreq.setChecked(true);
         }
 
         rbAsc.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +182,13 @@ public class FavSahamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sort = 0;
+
                 rbCode.setChecked(true);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
             }
         });
 
@@ -182,7 +196,13 @@ public class FavSahamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sort = 1;
+
+                rbCode.setChecked(false);
                 rb1Day.setChecked(true);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
             }
         });
 
@@ -190,7 +210,13 @@ public class FavSahamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sort = 2;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
                 rb1Month.setChecked(true);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
             }
         });
 
@@ -198,7 +224,41 @@ public class FavSahamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sort = 3;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
                 rb1Year.setChecked(true);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(false);
+            }
+        });
+
+        rbOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 4;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(true);
+                rbFreq.setChecked(false);
+            }
+        });
+
+        rbFreq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort = 5;
+
+                rbCode.setChecked(false);
+                rb1Day.setChecked(false);
+                rb1Month.setChecked(false);
+                rb1Year.setChecked(false);
+                rbOpen.setChecked(false);
+                rbFreq.setChecked(true);
             }
         });
 

@@ -346,6 +346,8 @@ public class ReksadanaFragment extends Fragment {
         RadioButton rb1Day = dialogView.findViewById(R.id.radBat1Day);
         RadioButton rb1Month = dialogView.findViewById(R.id.radBat1Month);
         RadioButton rb1Year = dialogView.findViewById(R.id.radBat1Year);
+        dialogView.findViewById(R.id.radBatOpen).setVisibility(View.GONE);
+        dialogView.findViewById(R.id.radBatFreq).setVisibility(View.GONE);
 
         rbCode.setText("Name");
 

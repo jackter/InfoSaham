@@ -17,6 +17,7 @@ public class MainCardSaham implements Serializable {
     private double pbv;
     private double vol;
     private double val;
+    private double freq;
     private double oneday;
     private double onemonth;
     private double ytd;
@@ -137,6 +138,14 @@ public class MainCardSaham implements Serializable {
 
     public void setVal(double val) {
         this.val = val;
+    }
+
+    public double getFreq() {
+        return freq;
+    }
+
+    public void setFreq(double freq) {
+        this.freq = freq;
     }
 
     public double getOneday() {
