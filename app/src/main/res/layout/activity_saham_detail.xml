@@ -88,6 +88,269 @@
                         android:background="@android:color/darker_gray"/>
 
                     <TableLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TableRow
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1a"
+                                android:text="Last"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="Prev"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="Open"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1b"
+                                android:text="Freq"/>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tvLast"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="10.000,00"/>
+
+                            <TextView
+                                android:id="@+id/tvPrev"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="9.775,00"/>
+                            <TextView
+                                android:id="@+id/tvOpen"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="9.775,00"/>
+                            <TextView
+                                android:id="@+id/tvFreq"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="9.775,00"/>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="High"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="Low"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="PER"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="PBV"/>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tvHigh"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="10.300,00"/>
+
+                            <TextView
+                                android:id="@+id/tvLow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="9.825,00"/>
+                            <TextView
+                                android:id="@+id/tvPER"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="17,6491"/>
+                            <TextView
+                                android:id="@+id/tvPBV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="right"
+                                android:text="0,9649"/>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="1 Day"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="1 Month"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape1"
+                                android:gravity="center_horizontal"
+                                android:text="Ytd"
+                                android:textColor="#5abd96"
+                                android:textSize="8pt" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textSize="8pt"
+                                android:textColor="#5abd96"
+                                android:background="@drawable/shape1"
+                                android:text="1 Year"/>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv1day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2a"
+                                android:gravity="center_horizontal"
+                                android:text="2,30%"/>
+
+                            <TextView
+                                android:id="@+id/tv1month"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="center_horizontal"
+                                android:text="16,28%"/>
+                            <TextView
+                                android:id="@+id/tvYtd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2"
+                                android:gravity="center_horizontal"
+                                android:text="-18,86%"/>
+                            <TextView
+                                android:id="@+id/tv1year"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textSize="8pt"
+                                android:textColor="#bca15c"
+                                android:background="@drawable/shape2b"
+                                android:gravity="center_horizontal"
+                                android:text="-6,32%"/>
+                        </TableRow>
+                    </TableLayout>
+
+                    <TableLayout
                         android:layout_marginTop="5dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -428,6 +691,78 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linLayCalender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_list_alt_24"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="8pt"
+                        android:text="Kalender"/>
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/btnArrowCalender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/ic_baseline_keyboard_arrow_down_24"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@android:color/darker_gray"/>
+            </LinearLayout>
+            <ScrollView
+                android:id="@+id/scrollViewCalender"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:scrollbars="horizontal|vertical"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                android:scrollbarStyle="outsideInset"
+                android:visibility="gone"
+                android:fillViewport="true">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="4dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    android:padding="5dp">
+                    <TableLayout
+                        android:id="@+id/tableLayoutCalender"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+                    </TableLayout>
+                </androidx.cardview.widget.CardView>
+            </ScrollView>
+
+            <LinearLayout
                 android:id="@+id/linLayDiv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -449,7 +784,7 @@
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="8pt"
-                        android:text="Dividen Yield"/>
+                        android:text="Hasil Dividen"/>
 
                     <Space
                         android:layout_width="0dp"
@@ -471,9 +806,8 @@
                     android:layout_marginRight="10dp"
                     android:background="@android:color/darker_gray"/>
             </LinearLayout>
-
             <ScrollView
-                android:id="@+id/scrollViewDividend"
+                android:id="@+id/scrollViewDividen"
                 android:layout_margin="10dp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"

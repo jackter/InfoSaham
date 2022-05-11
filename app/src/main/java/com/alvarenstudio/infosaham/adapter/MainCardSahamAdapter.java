@@ -67,7 +67,6 @@ public class MainCardSahamAdapter extends RecyclerView.Adapter<MainCardSahamAdap
             tvPBV = itemView.findViewById(R.id.tvPBV);
             tvVol = itemView.findViewById(R.id.tvVol);
             tvVal = itemView.findViewById(R.id.tvVal);
-
             tv1Day = itemView.findViewById(R.id.tv1day);
             tv1Month = itemView.findViewById(R.id.tv1month);
             tvYtd = itemView.findViewById(R.id.tvYtd);

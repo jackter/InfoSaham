@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alvarenstudio.infosaham.model.CatatanSaham;
 import com.alvarenstudio.infosaham.model.MainCardSaham;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.msa.dateedittext.DateEditText;
@@ -58,6 +61,8 @@ public class AddCatatSahamActivity extends AppCompatActivity {
     private Calendar myCalendar;
     private Long vTglTrx;
     private String TAG = AddCatatSahamActivity.class.getSimpleName();
+    private CatatanSaham catatan;
+    private boolean isEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +85,11 @@ public class AddCatatSahamActivity extends AppCompatActivity {
         spinType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                etJml.setText("");
-                etHarga.setText("");
-                etTotal.setText("");
+                if(!isEdit) {
+                    etJml.setText("");
+                    etHarga.setText("");
+                    etTotal.setText("");
+                }
 
                 if(spinType.getSelectedItem().toString().equals("Deposit") || spinType.getSelectedItem().toString().equals("Withdraw")) {
                     tvJml.setVisibility(View.GONE);
@@ -124,6 +131,26 @@ public class AddCatatSahamActivity extends AppCompatActivity {
 
         loadDataShared();
         tglTrx();
+
+        Intent mIntent = getIntent();
+        catatan = (CatatanSaham) mIntent.getSerializableExtra("cardCatatan");
+        isEdit = mIntent.getBooleanExtra("editCatatan", false);
+
+        if(isEdit) {
+            System.out.println("id catatan : " + catatan.getId());
+            spinType.setSelection(getIndexSpinner(spinType, catatan.getType()));
+            spinEmiten.setSelection(getIndexSpinner(spinEmiten, catatan.getEmiten()));
+            etJml.setText(catatan.getJmlSaham().toString());
+            etHarga.setText(catatan.getHargaSaham().toString());
+            etFee.setText(catatan.getFeeTrx().toString());
+            etTotal.setText(catatan.getNilaiSaham().toString());
+
+            vTglTrx = catatan.getTglTrx();
+            myCalendar.set(Calendar.YEAR, Integer.parseInt(new SimpleDateFormat("yyyy").format(vTglTrx)));
+            myCalendar.set(Calendar.MONTH, Integer.parseInt(new SimpleDateFormat("M").format(vTglTrx))-1);
+            myCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(new SimpleDateFormat("d").format(vTglTrx)));
+            updateLabelTgl();
+        }
 
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,29 +229,64 @@ public class AddCatatSahamActivity extends AppCompatActivity {
                 hashMap.put("nilaiSaham", Long.parseLong(etTotal.getText().toString().replace(",", "")));
                 hashMap.put("tglTrx", vTglTrx);
 
-                FirebaseFirestore
-                        .getInstance()
-                        .collection("catatan_saham")
-                        .add(hashMap)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                                finish();
-                                btnSimpan.setEnabled(true);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                                btnSimpan.setEnabled(true);
-                            }
-                        });
+                if(isEdit) {
+                    FirebaseFirestore
+                            .getInstance()
+                            .collection("catatan_saham")
+                            .document(catatan.getId())
+                            .set(hashMap, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot update with ID: " + catatan.getId());
+                                    btnSimpan.setEnabled(true);
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "DocumentSnapshot update with ID: " + catatan.getId());
+                                    btnSimpan.setEnabled(true);
+                                    Toast.makeText(getApplicationContext(), "Gagal merubah data",  Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+                else {
+                    FirebaseFirestore
+                            .getInstance()
+                            .collection("catatan_saham")
+                            .add(hashMap)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                    finish();
+                                    btnSimpan.setEnabled(true);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error adding document", e);
+                                    Toast.makeText(getApplicationContext(), "Gagal menambah data",  Toast.LENGTH_LONG).show();
+                                    btnSimpan.setEnabled(true);
+                                }
+                            });
+                }
             }
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private int getIndexSpinner(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
     }
 
     public class NumberTextWatcher implements TextWatcher {
@@ -330,7 +392,6 @@ public class AddCatatSahamActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
                 updateLabelTgl();
             }
         };

@@ -2,6 +2,7 @@ package com.alvarenstudio.infosaham;
 
 import android.content.Context;
 
+import com.alvarenstudio.infosaham.model.CalenderSaham;
 import com.alvarenstudio.infosaham.model.Emiten;
 import com.alvarenstudio.infosaham.model.EmitenClosingPrice;
 import com.alvarenstudio.infosaham.model.MainCardReksadana;
@@ -142,5 +143,37 @@ public class SharedPref {
         }
 
         return mEmitenClosingPrice;
+    }
+
+    public ArrayList<CalenderSaham> loadDataSharedCalenderSaham(String key) {
+        ArrayList<CalenderSaham> mCalenderSaham;
+
+        // method to load arraylist from shared prefs
+        // initializing our shared prefs with name as
+        // shared preferences.
+        android.content.SharedPreferences sharedPreferences = mContext.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+
+        // creating a variable for gson.
+        Gson gson = new Gson();
+
+        // below line is to get to string present from our
+        // shared prefs if not present setting it as null.
+        String json = sharedPreferences.getString(key, null);
+
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<ArrayList<CalenderSaham>>() {}.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        mCalenderSaham = gson.fromJson(json, type);
+
+        // checking below if the array list is empty or not
+        if (mCalenderSaham == null) {
+            // if the array list is empty
+            // creating a new array list.
+            mCalenderSaham = new ArrayList<>();
+        }
+
+        return mCalenderSaham;
     }
 }

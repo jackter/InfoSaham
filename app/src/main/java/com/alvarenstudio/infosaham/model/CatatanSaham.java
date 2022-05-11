@@ -1,6 +1,8 @@
 package com.alvarenstudio.infosaham.model;
 
-public class CatatanSaham {
+import java.io.Serializable;
+
+public class CatatanSaham implements Serializable {
     String id;
     String userid;
     String type;
@@ -10,6 +12,7 @@ public class CatatanSaham {
     Long nilaiSaham;
     Long feeTrx;
     Long tglTrx;
+    int hirarki;
 
     public CatatanSaham() {
     }
@@ -84,5 +87,13 @@ public class CatatanSaham {
 
     public void setTglTrx(Long tglTrx) {
         this.tglTrx = tglTrx;
+    }
+
+    public int getHirarki() {
+        return hirarki;
+    }
+
+    public void setHirarki(int hirarki) {
+        this.hirarki = hirarki;
     }
 }

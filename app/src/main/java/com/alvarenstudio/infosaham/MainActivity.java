@@ -1,7 +1,9 @@
 package com.alvarenstudio.infosaham;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -21,6 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -163,7 +166,24 @@ public class MainActivity extends AppCompatActivity {
                         menuSort2.performClick();
                     }
                 }
-
+                else if (item.getItemId() == R.id.rate){
+                    String appPackageName = getPackageName();
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    } catch (ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
+                }
+                else if (item.getItemId() == R.id.share){
+                    String link = "http://play.google.com/store/apps/details?id=" + getPackageName();
+                    Intent myIntent = new Intent(Intent.ACTION_SEND);
+                    myIntent.setType("text/plain");
+                    String shareBody = "Apakah anda ingin menginstall aplikasi Info Saham? " + link;
+                    String shareSub = "Share Apps";
+                    myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                    myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                    startActivity(Intent.createChooser(myIntent, "Share using"));
+                }
                 return false;
             }
         });
@@ -178,6 +198,10 @@ public class MainActivity extends AppCompatActivity {
         adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
+
+        WebViewHandler webViewHandler;
+        webViewHandler = new WebViewHandler(getApplicationContext());
+        webViewHandler.getCalender();
     }
 
     public FloatingActionButton getFab(int idx){

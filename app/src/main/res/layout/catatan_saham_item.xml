@@ -163,6 +163,13 @@
                     android:textSize="4pt"
                     android:text="Aug 19, 2021"/>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnDeleteCatatan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_baseline_delete_24"
+                android:layout_alignParentRight="true"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

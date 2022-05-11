@@ -180,8 +180,31 @@ public class CatatanSahamActivity extends AppCompatActivity {
                                 catatan.setFeeTrx((Long) doc.get("feeTrx"));
                                 catatan.setTglTrx((Long) doc.get("tglTrx"));
 
+                                if(catatan.getType().equals("Deposit")) {
+                                    catatan.setHirarki(0);
+                                }
+                                else if(catatan.getType().equals("Buy")) {
+                                    catatan.setHirarki(1);
+                                }
+                                else if(catatan.getType().equals("Sell")) {
+                                    catatan.setHirarki(2);
+                                }
+                                else if(catatan.getType().equals("Withdraw")) {
+                                    catatan.setHirarki(3);
+                                }
+                                else{
+                                    catatan.setHirarki(0);
+                                }
+
                                 mCatatan.add(catatan);
                             }
+
+                            Collections.sort(mCatatan, new Comparator<CatatanSaham>() {
+                                @Override
+                                public int compare(CatatanSaham t1, CatatanSaham t2) {
+                                    return t2.getHirarki() - t1.getHirarki();
+                                }
+                            });
 
                             Collections.sort(mCatatan, new Comparator<CatatanSaham>() {
                                 @Override
@@ -237,7 +260,9 @@ public class CatatanSahamActivity extends AppCompatActivity {
                                             curPrice = openingStock * openingPrice;
                                             newPrice = data.getJmlSaham() * data.getHargaSaham();
                                             closingStock = openingStock + data.getJmlSaham();
-                                            closingPrice = (curPrice + newPrice) / closingStock;
+                                            if(closingStock != 0) {
+                                                closingPrice = (curPrice + newPrice) / closingStock;
+                                            }
                                         }
                                         else if(data.getType().equals("Sell")){
                                             closingStock = openingStock + (data.getJmlSaham() * -1);

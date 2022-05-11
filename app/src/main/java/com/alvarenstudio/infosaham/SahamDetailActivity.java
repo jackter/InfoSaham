@@ -33,6 +33,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alvarenstudio.infosaham.model.CalenderSaham;
 import com.alvarenstudio.infosaham.model.LVDividend;
 import com.alvarenstudio.infosaham.model.MChart;
 import com.alvarenstudio.infosaham.model.MainCardSaham;
@@ -71,23 +72,25 @@ public class SahamDetailActivity extends AppCompatActivity {
     private ArrayList<Entry> x;
     private ArrayList<String> y;
     private ProgressBar chartProgBar, chartProgBarLive;
-    private TableLayout tableLayout;
+    private TableLayout tableDividenLayout, tableCalenderLayout;
     private LinearLayoutCompat linLayChart, linLayChartLive;
     private LinearLayout linLayDiv;
-    private ImageButton btnArrowDiv, btnArrowChartLive, btnArrowChart, btnRefresh;
-    private boolean arrowDiv = true;
+    private ImageButton btnArrowDiv, btnArrowCalender, btnArrowChartLive, btnArrowChart, btnRefresh;
+    private boolean arrowDiv = true, arrowCalender = false;
     private WebView webView1, webView2;
     private boolean flipChart = false, flipChartLive = false;
-    private TextView tvName, tvSectore, tvSubIndustry, tvVol, tvVal, tvCap, tvCLHi, tvCLLo, tvCHi, tvCLo;
+    private TextView tvName, tvSectore, tvSubIndustry, tvLast, tvPrev, tvOpen, tvFreq, tvHigh, tvLow, tvPER, tvPBV, tv1Day, tv1Month, tvYtd, tv1Year, tvVol, tvVal, tvCap, tvCLHi, tvCLLo, tvCHi, tvCLo;
     private ArrayList<String> liveChartStringList = new ArrayList<>();
     private ArrayList<String> chartStringList = new ArrayList<>();
+    private ArrayList<CalenderSaham> arrCalender = new ArrayList<>();
     private MainCardSaham mainCardSaham;
     private List<MainCardSaham> mMainCardSahamFav;
     private RadioButton rb1Month, rb1Year, rb3Year, rb5Year;
     private int rbChart = 4;
     private SharedPref sharedPref;
-    private ScrollView scrollView;
+    private ScrollView svDividen, svCalender;
     private long CLHi, CLLo, CHi, CLo;
+    private Formatter formatter = new Formatter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +100,25 @@ public class SahamDetailActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvName);
         tvSectore = findViewById(R.id.tvSectore);
         tvSubIndustry = findViewById(R.id.tvSubIndustry);
+        tvLast = findViewById(R.id.tvLast);
+        tvPrev = findViewById(R.id.tvPrev);
+        tvOpen = findViewById(R.id.tvOpen);
+        tvFreq = findViewById(R.id.tvFreq);
+        tvHigh = findViewById(R.id.tvHigh);
+        tvLow = findViewById(R.id.tvLow);
+        tvPER = findViewById(R.id.tvPER);
+        tvPBV = findViewById(R.id.tvPBV);
+        tvVol = findViewById(R.id.tvVol);
+        tvVal = findViewById(R.id.tvVal);
         tvVol = findViewById(R.id.tvVol);
         tvVal = findViewById(R.id.tvVal);
         tvCap = findViewById(R.id.tvCap);
-        tableLayout = findViewById(R.id.tableLayoutDividen);
+        tv1Day = findViewById(R.id.tv1day);
+        tv1Month = findViewById(R.id.tv1month);
+        tvYtd = findViewById(R.id.tvYtd);
+        tv1Year = findViewById(R.id.tv1year);
+        tableDividenLayout = findViewById(R.id.tableLayoutDividen);
+        tableCalenderLayout = findViewById(R.id.tableLayoutCalender);
         mLineChartLive = findViewById(R.id.chartLive);
         mLineChart = findViewById(R.id.chart);
         chartProgBar = findViewById(R.id.ivLoading);
@@ -109,6 +127,7 @@ public class SahamDetailActivity extends AppCompatActivity {
         linLayChartLive = findViewById(R.id.linLayLiveChart);
         linLayDiv = findViewById(R.id.linLayDiv);
         btnArrowDiv = findViewById(R.id.btnArrowDiv);
+        btnArrowCalender = findViewById(R.id.btnArrowCalender);
         btnArrowChartLive = findViewById(R.id.btnArrowChartLive);
         btnArrowChart = findViewById(R.id.btnArrowChart);
         btnRefresh = findViewById(R.id.btnRefresh);
@@ -118,7 +137,8 @@ public class SahamDetailActivity extends AppCompatActivity {
         tvCLo = findViewById(R.id.tvCLo);
         webView1 = new WebView(getApplicationContext());
         webView2 = new WebView(getApplicationContext());
-        scrollView = findViewById(R.id.scrollViewDividend);
+        svDividen = findViewById(R.id.scrollViewDividen);
+        svCalender = findViewById(R.id.scrollViewCalender);
 
         Intent mIntent = getIntent();
         mainCardSaham = (MainCardSaham) mIntent.getSerializableExtra("mainCardSaham");
@@ -128,9 +148,23 @@ public class SahamDetailActivity extends AppCompatActivity {
         tvName.setText(mainCardSaham.getName());
         tvSectore.setText(mainCardSaham.getSectore());
         tvSubIndustry.setText(mainCardSaham.getSubindustry());
-        tvVol.setText(currencyFormat(mainCardSaham.getVol()));
-        tvVal.setText(currencyFormat(mainCardSaham.getVal()));
-        tvCap.setText(currencyFormat(mainCardSaham.getCap()));
+
+        tvLast.setText(formatter.currencyFormat(mainCardSaham.getLast()));
+        tvPrev.setText(formatter.currencyFormat(mainCardSaham.getPrev()));
+        tvOpen.setText(formatter.currencyFormat(mainCardSaham.getOpen()));
+        tvFreq.setText(formatter.currencyFormat(mainCardSaham.getFreq()));
+        tvHigh.setText(formatter.currencyFormat(mainCardSaham.getHigh()));
+        tvLow.setText(formatter.currencyFormat(mainCardSaham.getLow()));
+        tvPER.setText(formatter.decimalFormat(mainCardSaham.getPer()));
+        tvPBV.setText(formatter.decimalFormat(mainCardSaham.getPbv()));
+        tvVol.setText(formatter.currencyFormat(mainCardSaham.getVol()));
+        tvVal.setText(formatter.currencyFormat(mainCardSaham.getVal()));
+        tvCap.setText(formatter.currencyFormat(mainCardSaham.getCap()));
+
+        tv1Day.setText(formatter.pctFormat(mainCardSaham.getOneday()));
+        tv1Month.setText(formatter.pctFormat(mainCardSaham.getOnemonth()));
+        tvYtd.setText(formatter.pctFormat(mainCardSaham.getYtd()));
+        tv1Year.setText(formatter.pctFormat(mainCardSaham.getOneyear()));
 
         sharedPref = new SharedPref(getApplicationContext());
         mMainCardSahamFav = sharedPref.loadDataSharedMainCardSaham("maincardsahamfav");
@@ -154,7 +188,7 @@ public class SahamDetailActivity extends AppCompatActivity {
                         btnArrowDiv.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24));
                     }
 
-                    scrollView.setVisibility(View.GONE);
+                    svDividen.setVisibility(View.GONE);
                 }
                 else{
                     arrowDiv = true;
@@ -165,12 +199,42 @@ public class SahamDetailActivity extends AppCompatActivity {
                         btnArrowDiv.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24));
                     }
 
-                    scrollView.setVisibility(View.VISIBLE);
+                    svDividen.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        btnArrowCalender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(arrowCalender) {
+                    arrowCalender = false;
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowCalender.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24) );
+                    } else {
+                        btnArrowCalender.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_down_24));
+                    }
+
+                    svCalender.setVisibility(View.GONE);
+                }
+                else{
+                    arrowCalender = true;
+
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        btnArrowCalender.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24) );
+                    } else {
+                        btnArrowCalender.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_keyboard_arrow_up_24));
+                    }
+
+                    svCalender.setVisibility(View.VISIBLE);
                 }
             }
         });
 
         rowDividend = new ArrayList<LVDividend>();
+
+        this.calender();
 
         new doItDiv().execute();
 
@@ -312,9 +376,61 @@ public class SahamDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public String currencyFormat(Double amount) {
-        DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
-        return formatter.format(amount).replace(".", "x").replace(",", ".").replace("x", ",");
+    public void calender() {
+        String header = "TANGGAL,PERIHAL,LOKASI";
+        this.createColumns(header, tableCalenderLayout);
+
+        arrCalender = sharedPref.loadDataSharedCalenderSaham("calendersaham");
+
+        boolean check = false;
+        for(CalenderSaham data:arrCalender) {
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(new TableRow.LayoutParams(
+                    TableRow.LayoutParams.FILL_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+
+            String[] arrHeader = header.split(",");
+
+            if(data.getEmiten().equals(code)) {
+                check = true;
+                for(int i = 0; i < arrHeader.length; i++) {
+                    TextView tv = new TextView(this);
+                    tv.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    tv.setTextSize(10);
+
+                    if(arrHeader[i].equals("TANGGAL")) {
+                        tv.setPadding(5, 5, 5, 5);
+                        tv.setText(data.getDate());
+                    }
+                    else if(arrHeader[i].equals("PERIHAL")) {
+                        tv.setPadding(5, 5, 5, 5);
+                        tv.setText(data.getDesc());
+                        tv.setWidth(400);
+                        tv.setGravity(Gravity.LEFT);
+                    }
+                    else if(arrHeader[i].equals("LOKASI")) {
+                        tv.setPadding(5, 5, 5, 5);
+                        if(data.getLocation().equals("")) {
+                            data.setLocation("-");
+                        }
+                        tv.setText(data.getLocation());
+                        tv.setWidth(400);
+                        tv.setGravity(Gravity.LEFT);
+                    }
+
+                    tableRow.addView(tv);
+                }
+
+                tableCalenderLayout.addView(tableRow, new TableLayout.LayoutParams(
+                        TableRow.LayoutParams.FILL_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
+            }
+        }
+
+        if(!check) {
+            tableCalenderLayout.setVisibility(View.GONE);
+        }
     }
 
     private void webViewPg1() {
@@ -403,8 +519,8 @@ public class SahamDetailActivity extends AppCompatActivity {
                             i++;
                         }
 
-                        tvCLHi.setText("High - " + String.valueOf(currencyFormat((double) CLHi)));
-                        tvCLLo.setText("Low - " + String.valueOf(currencyFormat((double) CLLo)));
+                        tvCLHi.setText("High - " + String.valueOf(formatter.currencyFormat((double) CLHi)));
+                        tvCLLo.setText("Low - " + String.valueOf(formatter.currencyFormat((double) CLLo)));
                         tvCLHi.setVisibility(View.VISIBLE);
                         tvCLLo.setVisibility(View.VISIBLE);
 
@@ -515,8 +631,8 @@ public class SahamDetailActivity extends AppCompatActivity {
                             i++;
                         }
 
-                        tvCHi.setText("High - " + String.valueOf(currencyFormat((double) CHi)));
-                        tvCLo.setText("Low - " + String.valueOf(currencyFormat((double) CLo)));
+                        tvCHi.setText("High - " + String.valueOf(formatter.currencyFormat((double) CHi)));
+                        tvCLo.setText("Low - " + String.valueOf(formatter.currencyFormat((double) CLo)));
                         tvCHi.setVisibility(View.VISIBLE);
                         tvCLo.setVisibility(View.VISIBLE);
 
@@ -620,7 +736,7 @@ public class SahamDetailActivity extends AppCompatActivity {
 
             if(rowDividend != null){
                 if(rowDividend.size() > 0){
-                    fillData(rowDividend);
+                    fillData(rowDividend, tableDividenLayout);
                     linLayDiv.setVisibility(View.VISIBLE);
                 }
             }
@@ -641,70 +757,34 @@ public class SahamDetailActivity extends AppCompatActivity {
         return dateFormatDst.format(parsedDate);
     }
 
-    private void createColumns() {
+    private void createColumns(String header, TableLayout tabLayout) {
         TableRow tableRow = new TableRow(this);
         tableRow.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.FILL_PARENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
         tableRow.setBackgroundColor(Color.parseColor("#1da1f2"));
 
-        // Desc Column
-        TextView textViewDesc = new TextView(this);
-        textViewDesc.setText("DESKRIPSI");
-        textViewDesc.setTextColor(Color.WHITE);
-        textViewDesc.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewDesc.setPadding(20, 30, 20, 30);
-        textViewDesc.setTextSize(12);
-        textViewDesc.setGravity(Gravity.CENTER_HORIZONTAL);
-        tableRow.addView(textViewDesc);
+        String[] arrHeader = header.split(",");
 
-        // Dividen Column
-        TextView textViewDividen = new TextView(this);
-        textViewDividen.setText("DIVIDEN");
-        textViewDividen.setTextColor(Color.WHITE);
-        textViewDividen.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewDividen.setPadding(20, 30, 20, 30);
-        textViewDividen.setTextSize(12);
-        textViewDividen.setGravity(Gravity.CENTER_HORIZONTAL);
-        tableRow.addView(textViewDividen);
+        for(int i = 0; i < arrHeader.length; i++) {
+            TextView tv = new TextView(this);
+            tv.setText(arrHeader[i]);
+            tv.setTextColor(Color.WHITE);
+            tv.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            tv.setPadding(20, 30, 20, 30);
+            tv.setTextSize(12);
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tableRow.addView(tv);
+        }
 
-        // Tahun Column
-        TextView textViewTahun = new TextView(this);
-        textViewTahun.setText("TAHUN");
-        textViewTahun.setTextColor(Color.WHITE);
-        textViewTahun.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewTahun.setPadding(20, 30, 20, 30);
-        textViewTahun.setTextSize(12);
-        textViewTahun.setGravity(Gravity.CENTER_HORIZONTAL);
-        tableRow.addView(textViewTahun);
-
-        // Record Column
-        TextView textViewRecord = new TextView(this);
-        textViewRecord.setText("RECORD");
-        textViewRecord.setTextColor(Color.WHITE);
-        textViewRecord.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewRecord.setPadding(20, 30, 20, 30);
-        textViewRecord.setTextSize(12);
-        textViewRecord.setGravity(Gravity.CENTER_HORIZONTAL);
-        tableRow.addView(textViewRecord);
-
-        // Distribute Column
-        TextView textViewDistribute = new TextView(this);
-        textViewDistribute.setText("DISTRIBUTE");
-        textViewDistribute.setTextColor(Color.WHITE);
-        textViewDistribute.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textViewDistribute.setPadding(20, 30, 20, 30);
-        textViewDistribute.setTextSize(12);
-        textViewDistribute.setGravity(Gravity.CENTER_HORIZONTAL);
-        tableRow.addView(textViewDistribute);
-
-        tableLayout.addView(tableRow, new TableLayout.LayoutParams(
+        tabLayout.addView(tableRow, new TableLayout.LayoutParams(
                 TableRow.LayoutParams.FILL_PARENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
     }
 
-    private void fillData(List<LVDividend> dividens) {
-        this.createColumns();
+    private void fillData(List<LVDividend> dividens, TableLayout tabLayout) {
+        String header = "DESKRIPSI,DIVIDEN,TAHUN,RECORD,DISTRIBUTE";
+        this.createColumns(header, tabLayout);
 
         for (LVDividend dividen : dividens) {
             TableRow tableRow = new TableRow(this);
@@ -712,51 +792,42 @@ public class SahamDetailActivity extends AppCompatActivity {
                     TableRow.LayoutParams.FILL_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
 
-            // Desc Column
-            TextView textViewDesc = new TextView(this);
-            textViewDesc.setText(dividen.getDesc());
-            textViewDesc.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            textViewDesc.setPadding(5, 5, 5, 5);
-            textViewDesc.setTextSize(10);
-            tableRow.addView(textViewDesc);
+            String[] arrHeader = header.split(",");
 
-            // Dividen Column
-            TextView textViewDividen = new TextView(this);
-            textViewDividen.setText(String.format("%.2f", Double.parseDouble(dividen.getDividend())));
-            textViewDividen.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            textViewDividen.setPadding(5, 5, 5, 5);
-            textViewDividen.setTextSize(12);
-            textViewDividen.setGravity(Gravity.CENTER_HORIZONTAL);
-            tableRow.addView(textViewDividen);
+            for(int i = 0; i < arrHeader.length; i++) {
+                TextView tv = new TextView(this);
+                tv.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                tv.setTextSize(10);
 
-            // Tahun Column
-            TextView textViewTahun = new TextView(this);
-            textViewTahun.setText(dividen.getYear());
-            textViewTahun.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            textViewTahun.setPadding(5, 5, 5, 5);
-            textViewTahun.setTextSize(12);
-            textViewTahun.setGravity(Gravity.CENTER_HORIZONTAL);
-            tableRow.addView(textViewTahun);
+                if(arrHeader[i].equals("DESKRIPSI")) {
+                    tv.setPadding(5, 5, 5, 5);
+                    tv.setText(dividen.getDesc());
+                }
+                else if(arrHeader[i].equals("DIVIDEN")) {
+                    tv.setPadding(5, 5, 5, 5);
+                    tv.setText(String.format("%.2f", Double.parseDouble(dividen.getDividend())));
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
+                else if(arrHeader[i].equals("TAHUN")) {
+                    tv.setPadding(5, 5, 5, 5);
+                    tv.setText(dividen.getYear());
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
+                else if(arrHeader[i].equals("RECORD")) {
+                    tv.setPadding(10, 5, 10, 5);
+                    tv.setText(formatDate(dividen.getRecorddate()));
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
+                else if(arrHeader[i].equals("DISTRIBUTE")) {
+                    tv.setPadding(10, 5, 5, 5);
+                    tv.setText(formatDate(dividen.getDistributedate()));
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
 
-            // Record Column
-            TextView textViewRecord = new TextView(this);
-            textViewRecord.setText(formatDate(dividen.getRecorddate()));
-            textViewRecord.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            textViewRecord.setPadding(10, 5, 10, 5);
-            textViewRecord.setTextSize(12);
-            textViewRecord.setGravity(Gravity.CENTER_HORIZONTAL);
-            tableRow.addView(textViewRecord);
+                tableRow.addView(tv);
+            }
 
-            // Distribute Column
-            TextView textViewDistribute = new TextView(this);
-            textViewDistribute.setText(formatDate(dividen.getDistributedate()));
-            textViewDistribute.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            textViewDistribute.setPadding(10, 5, 5, 5);
-            textViewDistribute.setTextSize(12);
-            textViewDistribute.setGravity(Gravity.CENTER_HORIZONTAL);
-            tableRow.addView(textViewDistribute);
-
-            tableLayout.addView(tableRow, new TableLayout.LayoutParams(
+            tabLayout.addView(tableRow, new TableLayout.LayoutParams(
                     TableRow.LayoutParams.FILL_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
         }

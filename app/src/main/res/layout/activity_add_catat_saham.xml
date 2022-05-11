@@ -54,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:digits="0123456789"
             android:drawablePadding="10dp"
             android:drawableLeft="@drawable/ic_baseline_beenhere_24"
             android:hint="Masukkan Jumlah Lembar"

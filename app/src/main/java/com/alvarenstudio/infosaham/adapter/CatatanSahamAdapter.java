@@ -2,19 +2,24 @@ package com.alvarenstudio.infosaham.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alvarenstudio.infosaham.AddCatatSahamActivity;
 import com.alvarenstudio.infosaham.CatatanSahamActivity;
 import com.alvarenstudio.infosaham.R;
 import com.alvarenstudio.infosaham.model.CatatanSaham;
@@ -22,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +47,7 @@ public class CatatanSahamAdapter extends RecyclerView.Adapter<CatatanSahamAdapte
     public class viewHolder extends RecyclerView.ViewHolder{
 
         public TextView tvType, tvEmiten, tvKuantitas, tvQty, tvHargaLbr, tvHarga, tvFeeTrx, tvFee, tvTotal, tvTglTrx;
+        public ImageButton btnDelete;
         public CardView cardCatatanSaham;
 
         public viewHolder(View itemView) {
@@ -57,6 +64,7 @@ public class CatatanSahamAdapter extends RecyclerView.Adapter<CatatanSahamAdapte
             tvFee = itemView.findViewById(R.id.tvFee);
             tvTotal = itemView.findViewById(R.id.tvTotal);
             tvTglTrx = itemView.findViewById(R.id.tvTglTrx);
+            btnDelete = itemView.findViewById(R.id.btnDeleteCatatan);
         }
 
     }
@@ -101,9 +109,9 @@ public class CatatanSahamAdapter extends RecyclerView.Adapter<CatatanSahamAdapte
             holder.tvFeeTrx.setVisibility(View.VISIBLE);
         }
 
-        holder.cardCatatanSaham.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View view) {
+            public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder((CatatanSahamActivity) mContext);
                 alert.setTitle("Info Saham");
                 alert.setMessage("Apakah anda yakin ingin menghapus catatan ini?");
@@ -117,17 +125,31 @@ public class CatatanSahamAdapter extends RecyclerView.Adapter<CatatanSahamAdapte
                     }
                 });
                 alert.show();
+            }
+        });
+
+        holder.cardCatatanSaham.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder((CatatanSahamActivity) mContext);
+                alert.setTitle("Info Saham");
+                alert.setMessage("Apakah anda yakin ingin merubah catatan ini?");
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Intent intent = new Intent(mContext, AddCatatSahamActivity.class);
+                        intent.putExtra("cardCatatan", (Serializable) catatan);
+                        intent.putExtra("editCatatan", true);
+                        mContext.startActivity(intent);
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+                alert.show();
                 return false;
             }
         });
-    }
-
-    private String loadPreferencesString(String key) {
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
-        String value = sharedPreferences.getString(key, "");
-
-        return value;
     }
 
     private void removeCatatanFirestore(String rowid){
@@ -155,7 +177,7 @@ public class CatatanSahamAdapter extends RecyclerView.Adapter<CatatanSahamAdapte
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
         Date resultdate = new Date(yourmilliseconds);
 
-        return sdf.format(resultdate).toString();
+        return sdf.format(resultdate);
     }
 
     public String currencyFormat(String amount, String curr) {
